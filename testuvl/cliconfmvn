@@ -1,0 +1,7 @@
+mvn install:install-file \
+   -Dfile=../testuvl/jartoadd/uvl-parser-0.1.0-SNAPSHOT-standalone.jar \
+   -DgroupId=neominik \
+   -DartifactId=uvlparser \
+   -Dversion=0.1.0 \
+   -Dpackaging=jar \
+   -DgeneratePom=true
