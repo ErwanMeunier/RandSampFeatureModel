@@ -4,19 +4,25 @@
 package randsampFM;
 
 import de.neominik.uvl.ast.UVLModel;
+import java.util.Set;
+import java.io.IOException;
 
 public class FmMandOpt extends FeatureModel {
 
+	Set<FeatureModel> mand;
+	Set<FeatureModel> opt;
+	
 	public FmMandOpt(UVLModel uvlModel) {
-		super(uvlModel);
+		
 		// TODO Auto-generated constructor stub
 	}
+	
+	public FmMandOpt() {} // input : rootfeature
 
 	public int count() {
-		Set<FeatureModel> mand = children.stream().filter(x -> ); // TODO would it be better to discriminate mandatory and optional during the Feature Diagram building ?
+		int countMand = children.stream().mapToInt(x->x.count()).reduce() + 1;
+		int countOpt = ;
+		return countOpt*coutMand;
 	}
 	
-	public boolean isMand(FeatureModel fm) {} // TODO true if mandatory
-	
-	public boolean isOpt(FeatureModel fm) {} // TODO true if optional
 }

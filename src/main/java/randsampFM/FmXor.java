@@ -10,6 +10,6 @@ public class FmXor extends FeatureModel {
 	}
 	
 	public int count() { // not tail recursive regarding the "+1"...
-		return children.stream().map(x->x.count()).reduce(0, (a,b)-> a+b) + 1;
+		return children.stream().mapToInt(x->x.count()).sum() + 1;
 	}
 }
