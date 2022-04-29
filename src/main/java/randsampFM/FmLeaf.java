@@ -9,7 +9,7 @@ public class FmLeaf extends FeatureModel {
 		// TODO Auto-generated constructor stub
 	}
 
-	public int count() {
+	public long count() {
 		return 1;
 	}
 	

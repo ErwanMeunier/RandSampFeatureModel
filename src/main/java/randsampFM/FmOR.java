@@ -9,7 +9,7 @@ public final class FmOR extends OthersFM {
 		// TODO Auto-generated constructor stub
 	}
 
-	public int count() {
-		return children.stream().mapToInt(x->x.count()+1).reduce(1, (a,b)-> a*b)-1;
+	public long count() {
+		return children.stream().mapToLong(x->x.count()+1).reduce(1, (a,b)-> a*b)-1;
 	}
 }

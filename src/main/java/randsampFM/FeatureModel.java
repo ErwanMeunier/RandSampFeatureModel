@@ -5,7 +5,6 @@ package randsampFM;
 
 //import java.util.ArrayList;
 import de.neominik.uvl.ast.*;
-import java.util.Set;
 //import de.neominik.uvl.UVLParser;
 
 /**
@@ -25,7 +24,7 @@ public abstract class FeatureModel {
 		// We call matching constructors
 	}
 	
-	public abstract int count();
+	public abstract long count();
 	
 	
 	//TODO public enumerate
