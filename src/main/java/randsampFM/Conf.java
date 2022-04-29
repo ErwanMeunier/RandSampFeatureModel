@@ -13,20 +13,45 @@ import java.util.Collections;
 public class Conf {
 	
 	private Set<Feature> innerSet;
-	private int hash;
 	private String signature; // Useful in ConfSet.class
 	
 	/*Creates a new empty Conf*/
 	public Conf() {
 		innerSet = Collections.emptySet(); // new empty set
-		hash = "".hashCode();
+		signature = "";
 	}
 	
 	/*Creates a new filled Conf*/
+	
+	/*
+	 * public ConfSet(Set<Conf> newSet) {
+		innerSet = Set.copyOf(newSet);
+		Object[] signatureList = innerSet.stream().map(x->x.getSignature()).sorted().toArray();
+		
+		// In order to concatenate efficiently
+		StringBuilder tmpSig = new StringBuilder("");
+		
+		for(Object c : signatureList) {
+			tmpSig = tmpSig.append((String) c);
+		}
+		
+		signature = tmpSig.toString();
+	}
+	 * */
+	
 	public Conf(Set<Feature> newSet){
 		innerSet = Set.copyOf(newSet); // immutable set
-		signature= innerSet.stream().map(ft -> ft.getName()).sorted().reduce("",(a,b)->a+b); // Sorts and concatenates the elements of the set -> to be hashed right after.  
-		hash = signature.hashCode();
+		Object[] signatureList = innerSet.stream().map(ft -> ft.getName()).sorted().toArray(); // Sorts and concatenates the elements of the set -> to be hashed right after.  
+		
+		// Efficient concatenation
+		
+		StringBuilder tmpSig = new StringBuilder("");
+		
+		for(Object c : signatureList) {
+			tmpSig = tmpSig.append((String) c);
+		}
+		
+		signature = tmpSig.toString();
 	}
 
 	public Set<Feature> getInnerSet() {
@@ -43,7 +68,7 @@ public class Conf {
 	
 	@Override
 	public int hashCode() {
-		return hash;
+		return signature.hashCode();
 	}
 	
 	@Override
@@ -55,7 +80,7 @@ public class Conf {
 		
 		Conf tempConf = (Conf) obj; // type casting (ClassCastException cannot happen because types have already been checked above)
 		
-		return (tempConf.hashCode()==this.hash); // no need to compare innerSets
+		return tempConf.getSignature().equals(this.signature); // strings comparison
 	}
 	
 	public Conf union(Conf addedConf) { // "immutable" union

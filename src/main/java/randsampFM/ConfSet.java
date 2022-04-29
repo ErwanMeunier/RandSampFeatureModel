@@ -6,6 +6,7 @@ package randsampFM;
 import java.util.Set;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -15,17 +16,31 @@ import java.util.stream.Collectors;
 public class ConfSet {
 	
 	private Set<Conf> innerSet;
-	private int hash;
+	private String signature;
 	
 	public ConfSet() {
 		innerSet = new HashSet<Conf> ();
-		hash = "".hashCode();
+		signature = "";
 	}
 	
 	public ConfSet(Set<Conf> newSet) {
 		innerSet = Set.copyOf(newSet);
-		String toBeHashed = innerSet.stream().map(x->x.getSignature()).sorted().reduce("",(a,b)->a+b);
-		hash = toBeHashed.hashCode();
+		Object[] signatureList = innerSet.stream().map(x->x.getSignature()).sorted().toArray();
+		
+		// In order to concatenate efficiently
+		StringBuilder tmpSig = new StringBuilder("");
+		
+		for(Object c : signatureList) {
+			tmpSig = tmpSig.append((String) c);
+		}
+		
+		signature = tmpSig.toString();
+	}
+	
+	// Unused for now
+	private ConfSet(Set<Conf> newSet, String signature){ // useful in copy()
+		innerSet = Set.copyOf(newSet);
+		this.signature = signature;
 	}
 	
 	public ConfSet createConfSetfromRaw(Set<Set<Feature>> newSet){ // otherwise, we can't have both ConfSet(Set<Set<Feature>> newSet) and ConfSet(Set<Conf> newSet) in the same time
@@ -34,17 +49,16 @@ public class ConfSet {
 		return new ConfSet(tmpSet2);
 	}
 	
-	public Set<Conf> getInnerSet(){
+	private Set<Conf> getInnerSet(){
 		return Set.copyOf(innerSet);
 	}
 	
+	/*@SuppressWarnings("Unused for now")
+	private ConfSet copy() {
+		return new ConfSet(innerSet,signature);
+	}*/
 	
-	@Override // not necessary as an "HashCode" but useful in equals
-	public int hashCode() {
-		return hash;
-	}
-	
-	@Override
+	/*@Override
 	public boolean equals(Object obj) {
 		if(this == obj) return true; // Same references
 		
@@ -52,14 +66,29 @@ public class ConfSet {
 		
 		ConfSet tempCS = (ConfSet) obj; // type casting (ClassCastException cannot happen because types have already been checked above)
 		
-		return (tempCS.hashCode()==this.hash); // no need to compare innerSets
-	}
-	
-	/*public ConfSet expansion() {
-		
+		return (tempCS.hashCode()==this.hash); // 
 	}*/
 	
-	public ConfSet union(ConfSet addedConf) {
+	public ConfSet expansion(ConfSet cs2) {
+		
+		Set<Conf> result = cs2.getInnerSet();
+		Set<Conf> tmpNewSet;
+		
+		for(Conf c1 : innerSet) {
+			tmpNewSet = result.stream().map(x -> x.union(c1)).collect(Collectors.toSet()); // "Distributes" type: Set<Conf>
+			result = union(result,tmpNewSet);
+		}
+		
+		return new ConfSet(result);
+	}
+	
+	private static Set<Conf> union(final Set<Conf> set1, final Set<Conf> set2){ // immutable union
+		Set<Conf> result = new HashSet<>(set1);
+		result.addAll(set2);
+		return result;
+	}
+	
+	public ConfSet union(final ConfSet addedConf) {
 		Set<Conf> newSet = Collections.emptySet(); // new empty set : Set<Conf> 
 		newSet.addAll(this.innerSet);
 		newSet.addAll(addedConf.getInnerSet());

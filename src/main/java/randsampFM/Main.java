@@ -7,6 +7,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.io.IOException;
 
+/*
+ * @author Erwan Meunier
+ * 
+ * 
+ * */
+
 public final class Main {
 
 	public static void main(String[] args) {

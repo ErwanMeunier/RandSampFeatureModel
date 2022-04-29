@@ -9,7 +9,7 @@ public final class FmXor extends OthersFM {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public int count() { // not tail recursive regarding the "+1"...
+	public int count() {
 		return children.stream().mapToInt(x->x.count()).sum() + 1;
 	}
 }
