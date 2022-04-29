@@ -13,16 +13,18 @@ public class FmMandOpt extends FeatureModel {
 	Set<FeatureModel> opt;
 	
 	public FmMandOpt(UVLModel uvlModel) {
-		
+		super()
 		// TODO Auto-generated constructor stub
 	}
 	
-	public FmMandOpt() {} // input : rootfeature
+	public FmMandOpt() {
+		//TODO
+	} // input : rootfeature
 
 	public int count() {
-		int countMand = children.stream().mapToInt(x->x.count()).reduce() + 1;
-		int countOpt = ;
-		return countOpt*coutMand;
+		int countMand = mand.stream().mapToInt(x->x.count()).reduce(1, (a,b)-> a*b);
+		int countOpt = opt.stream().mapToInt(x->x.count()+1).reduce(1, (a,b)-> a*b);
+		return countOpt*countMand;
 	}
 	
 }

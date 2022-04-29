@@ -14,14 +14,20 @@ import java.util.Set;
  */
 public abstract class FeatureModel {
 	
+	/**
+		 * @author erwan
+		 *
+		 */
+
 	protected Feature label;
-	protected Set<FeatureModel> children; // Will be just iterated over
 		
 	public FeatureModel(UVLModel uvlModel){ // Uses UVLParser to get processed-data from raw-data (uvl model)
-		
+		//TODO
 	}
 	
-	//public FeatureModel() there are several constructors...
+	public FeatureModel() {
+		// We call matching constructors
+	}
 	
 	public abstract int count();
 	

@@ -2,7 +2,7 @@ package randsampFM;
 
 import de.neominik.uvl.ast.UVLModel;
 
-public class FmOR extends FeatureModel {
+public final class FmOR extends OthersFM {
 
 	public FmOR(UVLModel uvlModel) {
 		super(uvlModel);
@@ -10,6 +10,6 @@ public class FmOR extends FeatureModel {
 	}
 
 	public int count() {
-		return children.stream().map(x->x.count()).reduce(0, (a,b)-> a+b);
+		return children.stream().mapToInt(x->x.count()+1).reduce(1, (a,b)-> a*b)-1;
 	}
 }
