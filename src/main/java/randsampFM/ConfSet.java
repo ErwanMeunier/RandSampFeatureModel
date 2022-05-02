@@ -82,6 +82,8 @@ public class ConfSet {
 		return new ConfSet(result);
 	}
 	
+	// TODO: EXPANSION BY CARDINALITY
+	
 	private static Set<Conf> union(final Set<Conf> set1, final Set<Conf> set2){ // immutable union
 		Set<Conf> result = new HashSet<>(set1);
 		result.addAll(set2);

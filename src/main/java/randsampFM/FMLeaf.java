@@ -2,9 +2,9 @@ package randsampFM;
 
 import de.neominik.uvl.ast.UVLModel;
 
-public class FmLeaf extends FeatureModel {
+public final class FMLeaf extends FeatureModel {
 
-	public FmLeaf(UVLModel uvlModel) {
+	public FMLeaf(UVLModel uvlModel) {
 		super(uvlModel);
 		// TODO Auto-generated constructor stub
 	}

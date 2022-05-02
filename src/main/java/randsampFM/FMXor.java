@@ -1,11 +1,9 @@
 package randsampFM;
 
-import de.neominik.uvl.ast.UVLModel;
+public final class FMXor extends FeatureModel{
 
-public final class FmXor extends OthersFM {
-
-	public FmXor() {
-		super();
+	public FMXor(final de.neominik.uvl.ast.Feature feature) {
+		super(feature);
 		// TODO Auto-generated constructor stub
 	}
 	
