@@ -38,15 +38,19 @@ public class ConfSet {
 	}
 	
 	// Unused for now
-	private ConfSet(Set<Conf> newSet, String signature){ // useful in copy()
+	private ConfSet(Set<Conf> newSet, String signature){
 		innerSet = Set.copyOf(newSet);
 		this.signature = signature;
 	}
 	
-	public ConfSet createConfSetfromRaw(Set<Set<Feature>> newSet){ // otherwise, we can't have both ConfSet(Set<Set<Feature>> newSet) and ConfSet(Set<Conf> newSet) in the same time
+	public ConfSet createConfSetfromRaw(final Set<Set<Feature>> newSet){ // otherwise, we can't have both ConfSet(Set<Set<Feature>> newSet) and ConfSet(Set<Conf> newSet) in the same time
 		Set<Set<Feature>> tmpSet = Set.copyOf(newSet); // immutable set
 		Set<Conf> tmpSet2 = Collections.unmodifiableSet(tmpSet.stream().map(x -> new Conf(x)).collect(Collectors.toSet())); // Almost the same principle as in Conf.class
 		return new ConfSet(tmpSet2);
+	}
+	
+	public static ConfSet singletonCS(final Feature feature) { // for FMLeaf
+		return new ConfSet(Set.of(new Conf(Set.of(feature))));
 	}
 	
 	private Set<Conf> getInnerSet(){
@@ -69,6 +73,19 @@ public class ConfSet {
 		return (tempCS.hashCode()==this.hash); // 
 	}*/
 	
+	private static Set<Conf> union(final Set<Conf> set1, final Set<Conf> set2){ // immutable union
+		Set<Conf> result = new HashSet<>(set1);
+		result.addAll(set2);
+		return result;
+	}
+	
+	public ConfSet union(final ConfSet addedConf) {
+		Set<Conf> newSet = Collections.emptySet(); // new empty set : Set<Conf> 
+		newSet.addAll(this.innerSet);
+		newSet.addAll(addedConf.getInnerSet());
+		return new ConfSet(newSet);
+	}
+	
 	public ConfSet expansion(ConfSet cs2) {
 		
 		Set<Conf> result = cs2.getInnerSet();
@@ -83,17 +100,4 @@ public class ConfSet {
 	}
 	
 	// TODO: EXPANSION BY CARDINALITY
-	
-	private static Set<Conf> union(final Set<Conf> set1, final Set<Conf> set2){ // immutable union
-		Set<Conf> result = new HashSet<>(set1);
-		result.addAll(set2);
-		return result;
-	}
-	
-	public ConfSet union(final ConfSet addedConf) {
-		Set<Conf> newSet = Collections.emptySet(); // new empty set : Set<Conf> 
-		newSet.addAll(this.innerSet);
-		newSet.addAll(addedConf.getInnerSet());
-		return new ConfSet(newSet);
-	}
 }

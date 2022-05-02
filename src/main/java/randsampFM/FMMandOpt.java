@@ -4,6 +4,7 @@
 package randsampFM;
 
 import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 
 public final class FMMandOpt extends FeatureModel {
 			
@@ -28,6 +29,18 @@ public final class FMMandOpt extends FeatureModel {
 		}
 		
 		return mandCount*optCount;
+	}
+	
+	public ConfSet enumerate() {
+		ConfSet root = ConfSet.singletonCS(this.label);
+		
+		return root.expansion(
+				Stream.concat(
+				 children.stream().filter(x -> !x.isOptional()).map(x -> x.enumerate()),
+				 children.stream().filter(x -> x.isOptional()).map(x -> x.enumerate().union(new ConfSet()))
+				 ).reduce((a,b)->a.expansion(b)).get()
+				);
+		 // TODO : Exceptions handling 
 	}
 	
 }

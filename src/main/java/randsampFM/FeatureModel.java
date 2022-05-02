@@ -148,7 +148,7 @@ public abstract class FeatureModel {
 	
 	public abstract long count();
 	
-	//public abstract ConfSet enumerate();
+	public abstract ConfSet enumerate();
 	
 	
 	//TODO public enumerate

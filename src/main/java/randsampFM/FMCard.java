@@ -10,7 +10,9 @@ public class FMCard extends FMOr{
 	}
 	
 	public long count() {
-		
+		//TODO
 	}
 
+	public ConfSet enumerate() {}
+	
 }

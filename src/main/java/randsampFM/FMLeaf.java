@@ -13,4 +13,7 @@ public final class FMLeaf extends FeatureModel {
 		return 1;
 	}
 	
+	public ConfSet enumerate() {
+		return ConfSet.singletonCS(this.label);
+	}
 }
