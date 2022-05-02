@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author stagiaire-tasc
@@ -124,7 +125,7 @@ public abstract class FeatureModel {
 			Group optGroup = groups.stream().filter(g -> g.getType().equals("optional")).findFirst().get();
 			var newFMsMand = Arrays.asList(mandGroup.getChildren()).stream().map(f -> new FMMandOpt(f,false));
 			var newFMsOpt = Arrays.asList(optGroup.getChildren()).stream().map(f -> new FMMandOpt(f,true));
-			
+			newFMs = Stream.concat(newFMsMand, newFMsOpt).collect(Collectors.toList());
 			break;
 			
 		case 3://CARD
