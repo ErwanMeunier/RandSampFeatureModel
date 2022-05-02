@@ -22,6 +22,7 @@ public abstract class FeatureModel {
 	protected boolean optional; // useful in FMMandOpt -> false by default. On
 	protected List<FeatureModel> children;
 	
+	//Global variables
 	protected final static String MAND = "MAND";
 	protected final static String OPT = "OPT";
 	
@@ -99,13 +100,13 @@ public abstract class FeatureModel {
 			}
 		}
 		
-		List<FeatureModel> newFMs;
+		List<FeatureModel> newFMs = null;
 		Group currentGroup;
 		
 		switch(typeIndex){
 		
 		case -1: // LEAF
-			newFMs = new ArrayList<FeatureModel>(new FMLeaf());
+			//newFMs = null;
 			break;
 			
 		case 0: //OR
@@ -132,7 +133,7 @@ public abstract class FeatureModel {
 			int lb = currentGroup.getLower();
 			int ub = currentGroup.getUpper();
 			
-			newFMs = Arrays.asList(currentGroup.getChildren()).stream().map(f -> new FMXor(f,lb,ub)).collect(Collectors.toList());;
+			newFMs = Arrays.asList(currentGroup.getChildren()).stream().map(f -> new FMCard(f,lb,ub)).collect(Collectors.toList());;
 			break;
 			
 		default:

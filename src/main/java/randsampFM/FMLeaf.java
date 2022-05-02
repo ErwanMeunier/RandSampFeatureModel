@@ -1,11 +1,20 @@
-package randsampFM;
+/*package randsampFM;
+
+import java.util.List;
 
 import de.neominik.uvl.ast.UVLModel;
 
 public final class FMLeaf extends FeatureModel {
 
-	public FMLeaf(UVLModel uvlModel) {
-		super(uvlModel);
+	protected Feature label;
+	protected boolean optional; // useful in FMMandOpt -> false by default. On
+	protected List<FeatureModel> children;
+	
+	public FMLeaf() {
+		super();
+		this.children = null;
+		this.label = null;
+		this.optional = false;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -14,6 +23,7 @@ public final class FMLeaf extends FeatureModel {
 	}
 	
 	public ConfSet enumerate() {
-		return ConfSet.singletonCS(this.label);
+		return new ConfSet();
 	}
 }
+*/

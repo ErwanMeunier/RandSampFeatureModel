@@ -49,7 +49,7 @@ public class ConfSet {
 		return new ConfSet(tmpSet2);
 	}
 	
-	public static ConfSet singletonCS(final Feature feature) { // for FMLeaf
+	public static ConfSet singletonCS(final Feature feature) { // for the rootFeatures
 		return new ConfSet(Set.of(new Conf(Set.of(feature))));
 	}
 	
