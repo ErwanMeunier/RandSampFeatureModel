@@ -1,9 +1,15 @@
 package randsampFM;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public final class FMXor extends FeatureModel{
 
-	public FMXor(final de.neominik.uvl.ast.Feature feature) {
-		super(feature);
+	List<FeatureModel> children;
+	
+	public FMXor(String label, List<de.neominik.uvl.ast.Feature> rawChildren) {
+		super(label);
+		this.children = rawChildren.stream().map(x -> parseFeatureModel(x)).collect(Collectors.toList());
 		// TODO Auto-generated constructor stub
 	}
 	

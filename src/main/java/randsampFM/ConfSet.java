@@ -6,6 +6,7 @@ package randsampFM;
 import java.util.Set;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -86,5 +87,12 @@ public class ConfSet {
 		return new ConfSet(result);
 	}
 	
+	public static ConfSet expansion(List<ConfSet> listCS) {
+		ConfSet result = new ConfSet();
+		for(ConfSet cs : listCS) {
+			result = result.expansion(cs);
+		}
+		return result;
+	}
 	// TODO: EXPANSION BY CARDINALITY
 }

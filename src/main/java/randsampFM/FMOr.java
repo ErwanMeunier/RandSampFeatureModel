@@ -1,9 +1,15 @@
 package randsampFM;
 
+import java.util.stream.Collectors;
+import java.util.List;
+
 public class FMOr extends FeatureModel {
 
-	public FMOr(de.neominik.uvl.ast.Feature feature) {
-		super(feature);
+	List<FeatureModel> children;
+	
+	public FMOr(String label, List<de.neominik.uvl.ast.Feature> rawChildren) {
+		super(label);
+		this.children = rawChildren.stream().map(x -> parseFeatureModel(x)).collect(Collectors.toList());
 	}
 
 	public long count() {

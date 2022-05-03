@@ -20,18 +20,21 @@ public final class Main {
 
 	public static void main(String[] args) {
 		String wd = System.getProperty("user.dir");// get the current working directory
-		
+		System.out.println("testMain");
 		UVLModel model = loadModel(wd + "/src/test/resources/test1.uvl");
-		
+		System.out.println("testMain");
 		ConfSet result;
+		//long nbConf;
 		
-		try {
+		
 			de.neominik.uvl.ast.Feature rootFeature = Arrays.asList(model.getRootFeatures()).stream().findFirst().get();
-			result = (FeatureModel.parseFeatureModel(rootFeature)).stream().findFirst().get().enumerate();
-		} catch(NoSuchElementException e){
-			System.out.println("Empty Feature Model");
-			result = new ConfSet(); // empty ConfSet
-		}
+			FeatureModel newFM = (FeatureModel.parseFeatureModel(rootFeature));
+			System.out.println("testMainTry");
+			System.out.println(newFM.count());
+			
+			result = newFM.enumerate();
+			System.out.println("testMainTry");
+		
 		
 		System.out.println(result.getContent());
 	}
@@ -45,7 +48,7 @@ public final class Main {
 	    	return null;
 	    }
 	}
-	
+
 	public static List<de.neominik.uvl.ast.Feature> getRootFeature(UVLModel uvlmodel){
 		return Arrays.asList(uvlmodel.getRootFeatures());
 	}

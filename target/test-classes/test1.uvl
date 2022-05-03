@@ -1,7 +1,7 @@
 namespace Root
 
 features
-	Root {abstract, extended__}	
+	Root {extended__}	
 		optional
-			Base
-			Base2
+			ft1
+			ft2
