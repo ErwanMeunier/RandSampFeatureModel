@@ -6,7 +6,6 @@ package randsampFM;
 import java.util.Set;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -57,21 +56,9 @@ public class ConfSet {
 		return Set.copyOf(innerSet);
 	}
 	
-	/*@SuppressWarnings("Unused for now")
-	private ConfSet copy() {
-		return new ConfSet(innerSet,signature);
-	}*/
-	
-	/*@Override
-	public boolean equals(Object obj) {
-		if(this == obj) return true; // Same references
-		
-		if(obj == null || obj.getClass()!=this.getClass()) return false; // Different types
-		
-		ConfSet tempCS = (ConfSet) obj; // type casting (ClassCastException cannot happen because types have already been checked above)
-		
-		return (tempCS.hashCode()==this.hash); // 
-	}*/
+	public String getContent() {
+		return signature;
+	}
 	
 	private static Set<Conf> union(final Set<Conf> set1, final Set<Conf> set2){ // immutable union
 		Set<Conf> result = new HashSet<>(set1);

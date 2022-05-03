@@ -9,6 +9,8 @@ import de.neominik.uvl.ast.*;
 
 import java.util.List;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -36,10 +38,10 @@ public abstract class FeatureModel {
 	private static final String LEAF = "leaf";*/
 	//private static final String NONE = "NONE";
 		
-	public FeatureModel(UVLModel uvlModel){ // Uses UVLParser to get processed-data from raw-data (uvl model)
+	/*public FeatureModel(UVLModel uvlModel){ // Uses UVLParser to get processed-data from raw-data (uvl model)
 		this.label = new Feature(uvlModel.toString());
 		//TODO
-	}
+	}*/
 	
 	public FeatureModel(final de.neominik.uvl.ast.Feature feature) {
 		this.label = new Feature(feature.getName()); // retrieves the name attached to the current feature
@@ -51,9 +53,8 @@ public abstract class FeatureModel {
 		return parseFeatureModel(uvlModel.getRootFeatures());
 	}*/
 	
-	private static List<FeatureModel> parseFeatureModel(final de.neominik.uvl.ast.Feature feature) {
+	public static List<FeatureModel> parseFeatureModel(final de.neominik.uvl.ast.Feature feature) {
 		List<Group> groups = Arrays.asList(feature.getGroups()); // retrieves all the groups under the feature
-		
 		/* 
 		 * 0 -> OR
 		 * 1 -> XOR
@@ -61,7 +62,8 @@ public abstract class FeatureModel {
 		 * 3 -> Cardinality
 		 * */
 		
-		ArrayList<Integer> nbTypes = new ArrayList<Integer>(4); // counts how many times a type has been encountered below
+		ArrayList<Integer> nbTypes = new ArrayList<Integer>(Arrays.asList(new Integer[4])); // counts how many times a type has been encountered below
+		Collections.fill(nbTypes, 0); // nbTypes is now full of zero
 		
 		for(Group group : groups) { 
 			switch(group.getType()) { // got naming conventions from neominik/uvl-parser/resources/uvl.bnf 
