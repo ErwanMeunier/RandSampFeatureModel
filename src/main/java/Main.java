@@ -1,4 +1,4 @@
-package randsampFM;
+
 
 import de.neominik.uvl.ast.*;
 import randsampFM.featureModel.FeatureModel;

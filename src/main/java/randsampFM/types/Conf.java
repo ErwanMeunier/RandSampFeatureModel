@@ -1,6 +1,9 @@
-package randsampFM;
+package randsampFM.types;
 
 import java.util.Set;
+
+import randsampFM.featureModel.Feature;
+
 import java.util.HashSet;
 
 public class Conf {

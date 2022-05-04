@@ -1,13 +1,15 @@
 /**
  * 
  */
-package randsampFM;
+package randsampFM.types;
 
 import java.util.Set;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import randsampFM.featureModel.Feature;
 
 public class ConfSet {
 	

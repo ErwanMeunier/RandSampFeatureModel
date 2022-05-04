@@ -1,7 +1,7 @@
 /**
  * 
  */
-package randsampFM;
+package randsampFM.featureModel;
 
 public class Feature {
 	
