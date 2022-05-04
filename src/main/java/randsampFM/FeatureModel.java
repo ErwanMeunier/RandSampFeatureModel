@@ -11,66 +11,16 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
-//import java.util.stream.Stream;
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
-/**
- * @author stagiaire-tasc
- *
- */
 public abstract class FeatureModel {
 	
 	protected Feature label;
-	//protected boolean leaf;
-	//protected List<FeatureModel> children;
-	
-	//Global variables
-	protected final static String MAND = "MAND";
-	protected final static String OPT = "OPT";
-	
-	
-	/*private static final String OR = "or";
-	private static final String XOR = "xor";
-	private static final String MANDOPT = "mandopt";
-	private static final String CARD = "card";
-	
-	private static final String LEAF = "leaf";*/
-	//private static final String NONE = "NONE";
-		
-	/*public FeatureModel(UVLModel uvlModel){ // Uses UVLParser to get processed-data from raw-data (uvl model)
-		this.label = new Feature(uvlModel.toString());
-		//TODO
-	}*/
-	
-	/*
-	 * public static List<de.neominik.uvl.ast.Feature> getRootFeature(UVLModel uvlmodel){
-		return Arrays.asList(uvlmodel.getRootFeatures());
-	}
-	 * */
-	
-	/*public FeatureModel(final de.neominik.uvl.ast.UVLModel uvlModel) {
-		de.neominik.uvl.ast.Feature rootFeature;
-		rootFeature =  Arrays.asList(uvlModel.getRootFeatures()).get(0); // TODO : Exception handling ?
-		this.label = new
-	}*/
-	
-	/*public FeatureModel(final de.neominik.uvl.ast.Feature feature) {
-		
-		this.label = new Feature(feature.getName()); // retrieves the name attached to the current feature
-		System.out.println(label.getName());
-		this.children = parseFeatureModel(feature); // missing try/catch ?
-		System.out.println("Enfant de " + label.getName() + " : " + children.toString());
-		this.optional = false;
-	}*/
 	
 	public FeatureModel(String label) {
 		this.label = new Feature(label);
 	}
-	
-	/*public static List<FeatureModel> parseFeatureModel(UVLModel uvlModel) {
-		return parseFeatureModel(uvlModel.getRootFeatures());
-	}*/
-	
 	
 	public static FeatureModel parseFeatureModel(final de.neominik.uvl.ast.Feature feature) {
 		List<Group> groups = Arrays.asList(feature.getGroups()); // retrieves all the groups under the feature
@@ -84,7 +34,6 @@ public abstract class FeatureModel {
 		ArrayList<Integer> nbTypes = new ArrayList<Integer>(Arrays.asList(new Integer[4])); // counts how many times a type has been encountered below
 		Collections.fill(nbTypes, 0); // nbTypes is now full of zero
 		
-		System.out.println("testFM");
 		for(Group group : groups) { 
 			switch(group.getType()) { // got naming conventions from neominik/uvl-parser/resources/uvl.bnf 
 			case "or":
@@ -98,7 +47,6 @@ public abstract class FeatureModel {
 				break;
 			case "optional":
 				nbTypes.set(2, nbTypes.get(2)+1); // same box than optional
-				System.out.println("optional");
 				break;
 			case "cardinalities":
 				nbTypes.set(3, nbTypes.get(3)+1);
@@ -107,8 +55,6 @@ public abstract class FeatureModel {
 				throw new  UnsupportedOperationException("Type not handled.");
 			}
 		}
-		
-		//System.out.println(nbTypes.stream().map(x -> x.toString()).reduce((a,b)->a+b));//test
 		
 		int typeIndex = -1;
 		
@@ -195,7 +141,6 @@ public abstract class FeatureModel {
 			throw new  UnsupportedOperationException("FilteredTypes not consistent with typeIndex"); // cannot happen 
 		}
 		
-		System.out.println(result.toString());
 		return result; // return both type and feature model
 	}	
 	 
@@ -204,15 +149,29 @@ public abstract class FeatureModel {
 		if(this.label == null) {
 			return "null";
 		} else {
-			return label.getName();
+			return label.toString();
 		}
 	}
 	
 	public abstract long count();
 	
 	public abstract ConfSet enumerate();
-	
-	
+
 	//TODO public enumerate
+	public static List<ConfSet> enumerate(List<FeatureModel> fmList, boolean isOptional) {
+		LinkedList<ConfSet> result = new LinkedList<ConfSet>();
+		
+		if(isOptional) {
+			for(FeatureModel fm : fmList) {
+				result.addLast(fm.enumerate());
+			}
+		}else {
+			for(FeatureModel fm : fmList) {
+				result.addLast(fm.enumerate().union(new ConfSet()));
+			}
+		}
+
+		return List.copyOf(result);
+	}
 	
 }

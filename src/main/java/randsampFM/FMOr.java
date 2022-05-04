@@ -2,6 +2,7 @@ package randsampFM;
 
 import java.util.stream.Collectors;
 import java.util.List;
+import java.util.Set;
 
 public class FMOr extends FeatureModel {
 
@@ -17,8 +18,10 @@ public class FMOr extends FeatureModel {
 	}
 	
 	public ConfSet enumerate() {
-		ConfSet root = ConfSet.singletonCS(this.label);
-		return root.expansion(children.stream().map(x -> x.enumerate().union(new ConfSet())).reduce((a,b) -> a.expansion(b)).get());
+		Conf rootConf = new Conf(Set.of(this.label)); 
+		ConfSet root = new ConfSet(Set.of(rootConf));
+		ConfSet result = root.expansion(children.stream().map(x -> x.enumerate().union(new ConfSet(Set.of(new Conf())))).reduce((a,b) -> a.expansion(b)).get());
+		return result.without(rootConf);
 		// TODO : Exceptions handling
 	}
 }

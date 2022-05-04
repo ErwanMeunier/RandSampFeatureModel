@@ -1,15 +1,8 @@
-/**
- * 
- */
 package randsampFM;
 
 import java.util.Set;
-import java.util.Collections;
+import java.util.HashSet;
 
-/**
- * @author stagiaire-tasc
- *
- */
 public class Conf {
 	
 	private Set<Feature> innerSet;
@@ -17,38 +10,20 @@ public class Conf {
 	
 	/*Creates a new empty Conf*/
 	public Conf() {
-		innerSet = Collections.emptySet(); // new empty set
-		signature = "";
+		innerSet = new HashSet<>();
+		signature = "[]";
 	}
-	
-	/*Creates a new filled Conf*/
-	
-	/*
-	 * public ConfSet(Set<Conf> newSet) {
-		innerSet = Set.copyOf(newSet);
-		Object[] signatureList = innerSet.stream().map(x->x.getSignature()).sorted().toArray();
-		
-		// In order to concatenate efficiently
-		StringBuilder tmpSig = new StringBuilder("");
-		
-		for(Object c : signatureList) {
-			tmpSig = tmpSig.append((String) c);
-		}
-		
-		signature = tmpSig.toString();
-	}
-	 * */
 	
 	public Conf(Set<Feature> newSet){
 		innerSet = Set.copyOf(newSet); // immutable set
-		Object[] signatureList = innerSet.stream().map(ft -> ft.getName()).sorted().toArray(); // Sorts and concatenates the elements of the set -> to be hashed right after.  
+		Object[] signatureList = innerSet.stream().map(ft -> ft.toString()).sorted().toArray(); // Sorts and concatenates the elements of the set -> to be hashed right after.  
 		
 		// Efficient concatenation
 		
 		StringBuilder tmpSig = new StringBuilder("");
 		
 		for(Object c : signatureList) {
-			tmpSig = tmpSig.append((String) c);
+			tmpSig = tmpSig.append(((String)c) + ",");
 		}
 		
 		signature = tmpSig.toString();
@@ -60,6 +35,11 @@ public class Conf {
 	
 	public String getSignature() {
 		return signature;
+	}
+	
+	@Override
+	public String toString() {
+		return "[" + signature +"]"; // TODO -> Clean + and use StringBuilder
 	}
 
 	public Conf copy(){ // TODO We could make another constructor in order to avoid to compute the hash twice
@@ -79,20 +59,14 @@ public class Conf {
 		if(obj == null || obj.getClass()!=this.getClass()) return false; // Different types
 		
 		Conf tempConf = (Conf) obj; // type casting (ClassCastException cannot happen because types have already been checked above)
-		
 		return tempConf.getSignature().equals(this.signature); // strings comparison
 	}
 	
 	public Conf union(Conf addedConf) { // "immutable" union
-		Set<Feature> newSet = Collections.emptySet(); // new empty set
-		newSet.addAll(this.innerSet);
+
+		Set<Feature> newSet = new HashSet<>();
+		newSet.addAll(this.getInnerSet());
 		newSet.addAll(addedConf.getInnerSet());
 		return new Conf(newSet);
-	}
-	
-	/*public Conf remove(Set<Feature> set){
-		Really useful ?
-	}*/
-	
-	
+	}	
 }

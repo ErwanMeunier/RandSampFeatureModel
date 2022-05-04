@@ -4,39 +4,22 @@ import de.neominik.uvl.ast.*;
 import de.neominik.uvl.UVLParser;
 
 import java.util.Arrays;
-import java.util.List;
+//import java.util.List;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.io.IOException;
-import java.util.NoSuchElementException;
 
 /*
  * @author Erwan Meunier
- * 
- * 
+ * since 04/08/2022
  * */
 
 public final class Main {
 
+	final static String wd = System.getProperty("user.dir"); // working directory
+	
 	public static void main(String[] args) {
-		String wd = System.getProperty("user.dir");// get the current working directory
-		System.out.println("testMain");
-		UVLModel model = loadModel(wd + "/src/test/resources/test1.uvl");
-		System.out.println("testMain");
-		ConfSet result;
-		//long nbConf;
-		
-		
-			de.neominik.uvl.ast.Feature rootFeature = Arrays.asList(model.getRootFeatures()).stream().findFirst().get();
-			FeatureModel newFM = (FeatureModel.parseFeatureModel(rootFeature));
-			System.out.println("testMainTry");
-			System.out.println(newFM.count());
-			
-			result = newFM.enumerate();
-			System.out.println("testMainTry");
-		
-		
-		System.out.println(result.getContent());
+		System.out.println(parseAndConvert("/src/test/resources/test1.uvl").enumerate());
 	}
 	
 	public static UVLModel loadModel(final String filename) {
@@ -49,7 +32,13 @@ public final class Main {
 	    }
 	}
 
-	public static List<de.neominik.uvl.ast.Feature> getRootFeature(UVLModel uvlmodel){
-		return Arrays.asList(uvlmodel.getRootFeatures());
+	public static FeatureModel uvlModeltoFM(final UVLModel uvlmodel){
+		de.neominik.uvl.ast.Feature rootFeature = Arrays.asList(uvlmodel.getRootFeatures()).stream().findFirst().get();
+		return FeatureModel.parseFeatureModel(rootFeature);
 	}
+	
+	public static FeatureModel parseAndConvert(final String filename) { // intended to the benchmark
+		return uvlModeltoFM(loadModel(wd+filename)); // wd can be removed
+	}
+	
 }

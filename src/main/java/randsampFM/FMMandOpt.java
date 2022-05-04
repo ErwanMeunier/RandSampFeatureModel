@@ -1,6 +1,3 @@
-/**
- * 
- */
 package randsampFM;
 
 import java.util.List;
@@ -47,40 +44,42 @@ public final class FMMandOpt extends FeatureModel {
 		
 		Stream<ConfSet> mandStream = Stream.empty(); 
 		Stream<ConfSet> optStream = Stream.empty();	
-		ConfSet result;
-		boolean bothNotEmpty = true;
-		
-		System.out.println("enumerateMANDOPT");
+		ConfSet result = new ConfSet();
+		short nbEmpty = 0;
 		
 		// mandChilds and optChilds cannot be simultaneously empty
 		
 		if(mandChilds.isEmpty()) {
-			result = ConfSet.expansion(optChilds.stream().map(x -> x.enumerate().union(new ConfSet())).collect(Collectors.toList()));
-			bothNotEmpty = false;
+			result = ConfSet.expansion(optChilds.stream().map(x -> x.enumerate().union(ConfSet.emptyCS())).collect(Collectors.toList()));
+			nbEmpty++;
 		} else {
 			mandStream = mandChilds.stream().map(x -> x.enumerate());
 			
 		}
-		System.out.println("enumerateMANDOPT");
+
 		if(optChilds.isEmpty()) {
 			result = ConfSet.expansion(mandChilds.stream().map(x -> x.enumerate()).collect(Collectors.toList()));
-			bothNotEmpty = true;
+			nbEmpty++;
 		} else {
-			optStream = optChilds.stream().map(x -> x.enumerate().union(new ConfSet()));
+			optStream = optChilds.stream().map(x -> x.enumerate().union(ConfSet.emptyCS()));
 		}
 		
-		if(bothNotEmpty) {
-			result = ConfSet.expansion(Stream.concat(mandStream, optStream).collect(Collectors.toList()));
-		}else {
-			throw new NoSuchElementException("Something wrong happened");//TODO
+		switch(nbEmpty) {
+		
+		case 0:
+			ConfSet tempMand = ConfSet.expansion(mandStream.collect(Collectors.toList()));
+			ConfSet tempOpt = ConfSet.expansion(optStream.collect(Collectors.toList()));
+			result = tempMand.expansion(tempOpt);
+			break;
+		
+		case 1: 
+			break;
+			
+		default: // ~ case 0
+			throw new NoSuchElementException("Both mandStream and optStrem cannot be empty");
 		}
-		
-		System.out.println("enumerateMANDOPT");
-		System.out.println(optChilds.toString());
-		System.out.println(mandChilds.toString());
-		
-		
+
 		return root.expansion(result); // TODO : Exceptions handling 
 	}
-	
+
 }

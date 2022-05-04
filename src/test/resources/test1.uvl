@@ -2,6 +2,9 @@ namespace Root
 
 features
 	Root {extended__}	
+		mandatory
+			A
+
 		optional
-			ft1
-			ft2
+			B
+			C

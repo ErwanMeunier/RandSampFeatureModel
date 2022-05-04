@@ -3,19 +3,21 @@
  */
 package randsampFM;
 
-/**
- * @author stagiaire-tasc
- *
- */
 public class Feature {
 	
 	private final String name;
-	
+	;
 	public Feature(String name) {
 		this.name = name;
 	}
 
+	@Deprecated
 	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public String toString() {
 		return name;
 	}
 	
