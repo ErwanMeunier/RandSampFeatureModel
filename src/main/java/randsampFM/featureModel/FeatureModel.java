@@ -3,8 +3,8 @@
  */
 package randsampFM.featureModel;
 
-//import java.util.ArrayList;
 import de.neominik.uvl.ast.*;
+
 import randsampFM.types.ConfSet;
 import randsampFM.types.Feature;
 
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
+import java.math.BigInteger;
 
 public abstract class FeatureModel {
 	
@@ -155,7 +156,7 @@ public abstract class FeatureModel {
 		}
 	}
 	
-	public abstract long count();
+	public abstract BigInteger count();
 	
 	public abstract ConfSet enumerate();
 

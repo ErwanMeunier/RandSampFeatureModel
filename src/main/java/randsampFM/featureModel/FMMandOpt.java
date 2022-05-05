@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.math.BigInteger;
 
 import randsampFM.types.ConfSet;
 
@@ -19,26 +20,26 @@ public final class FMMandOpt extends FeatureModel {
 	}
 
 	@Override
-	public long count() {
-		long optCount;
-		long mandCount;
+	public BigInteger count() {
+		BigInteger optCount;
+		BigInteger mandCount;
 		
 		if(optChilds.isEmpty()) {
-			optCount = 1;
+			optCount = BigInteger.ONE;
 		} 
 		else 
 		{
-			optCount = optChilds.stream().mapToLong(x -> x.count()+1).reduce((a,b)->a*b).getAsLong();
+			optCount = optChilds.stream().map(x -> x.count().add(BigInteger.ONE)).reduce((a,b)->a.multiply(b)).get();
 		}
 		
 		if(mandChilds.isEmpty()) {
-			mandCount = 1;
+			mandCount = BigInteger.ONE;
 		} 
 		else {
-			mandCount = mandChilds.stream().mapToLong(x -> x.count()+1).reduce((a,b)->a*b).getAsLong();
+			mandCount = mandChilds.stream().map(x -> x.count()).reduce((a,b)->a.multiply(b)).get();
 		}
 		
-		return mandCount*optCount;
+		return mandCount.multiply(optCount);
 	}
 	
 	public ConfSet enumerate() {

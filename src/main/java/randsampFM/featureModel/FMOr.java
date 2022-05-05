@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import randsampFM.types.Conf;
 import randsampFM.types.ConfSet;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Set;
 
@@ -17,14 +18,14 @@ public class FMOr extends FeatureModel {
 		this.children = rawChildren.stream().map(x -> parseFeatureModel(x)).collect(Collectors.toList());
 	}
 
-	public long count() {
-		return children.stream().mapToLong(x->x.count()+1).reduce(1, (a,b)-> a*b)-1;
+	public BigInteger count() {
+		return children.stream().map(x->x.count().add(BigInteger.ONE)).reduce(BigInteger.ONE, (a,b)-> a.multiply(b)).subtract(BigInteger.ONE);
 	}
 	
 	public ConfSet enumerate() {
 		Conf rootConf = new Conf(Set.of(this.label)); 
 		ConfSet root = new ConfSet(Set.of(rootConf));
-		ConfSet result = root.expansion(children.stream().map(x -> x.enumerate().union(new ConfSet(Set.of(new Conf())))).reduce((a,b) -> a.expansion(b)).get());
+		ConfSet result = root.expansion(children.stream().map(x -> x.enumerate().union(ConfSet.emptyCS())).reduce(ConfSet.emptyCS(),(a,b) -> a.expansion(b)));
 		return result.without(rootConf);
 		// TODO : Exceptions handling
 	}

@@ -2,6 +2,7 @@ package randsampFM.featureModel;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.math.BigInteger;
 
 import randsampFM.types.ConfSet;
 import randsampFM.types.Feature;
@@ -21,8 +22,8 @@ public class FMCard extends FeatureModel{
 		this.children = rawChildren.stream().map(x -> parseFeatureModel(x)).collect(Collectors.toList());
 	}
 	
-	public long count() {
-		return 1;
+	public BigInteger count() {
+		return BigInteger.ONE;
 	}
 
 	public ConfSet enumerate() {

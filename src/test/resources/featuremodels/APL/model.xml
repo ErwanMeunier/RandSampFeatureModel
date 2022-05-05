@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<featureModel>
+	<properties>
+		<graphics key="autolayoutconstraints" value="false"/>
+		<graphics key="legendautolayout" value="true"/>
+		<graphics key="showshortnames" value="false"/>
+		<graphics key="layout" value="horizontal"/>
+		<graphics key="showcollapsedconstraints" value="true"/>
+		<graphics key="legendhidden" value="false"/>
+		<graphics key="layoutalgorithm" value="1"/>
+	</properties>
+	<struct>
+		<and abstract="true" mandatory="true" name="APL">
+			<and abstract="true" mandatory="true" name="mainAPL">
+				<graphics key="collapsed" value="false"/>
+				<and abstract="true" mandatory="true" name="Java">
+					<graphics key="collapsed" value="false"/>
+					<and abstract="true" mandatory="true" name="mainJava">
+						<graphics key="collapsed" value="false"/>
+						<feature name="reform"/>
+						<feature name="jedi"/>
+						<feature mandatory="true" name="jak2java"/>
+						<feature mandatory="true" name="bali"/>
+					</and>
+				</and>
+				<alt abstract="true" name="Xml">
+					<graphics key="collapsed" value="false"/>
+					<feature name="xc"/>
+					<feature name="xak"/>
+				</alt>
+				<feature name="cpp"/>
+				<and abstract="true" name="Gui">
+					<graphics key="collapsed" value="false"/>
+					<and abstract="true" mandatory="true" name="mainGUI">
+						<graphics key="collapsed" value="false"/>
+						<feature name="me"/>
+						<feature name="mmatrix"/>
+						<feature name="guidsl"/>
+						<feature name="web"/>
+					</and>
+				</and>
+				<feature name="drc"/>
+				<and abstract="true" name="bc">
+					<graphics key="collapsed" value="false"/>
+					<feature mandatory="true" name="bcjak2java"/>
+				</and>
+				<and abstract="true" name="aj">
+					<graphics key="collapsed" value="false"/>
+					<feature mandatory="true" name="jak2aj"/>
+				</and>
+			</and>
+		</and>
+	</struct>
+	<constraints>
+		<rule>
+			<imp>
+				<var>bc</var>
+				<var>mmatrix</var>
+			</imp>
+		</rule>
+		<rule>
+			<imp>
+				<var>me</var>
+				<var>mmatrix</var>
+			</imp>
+		</rule>
+	</constraints>
+</featureModel>
