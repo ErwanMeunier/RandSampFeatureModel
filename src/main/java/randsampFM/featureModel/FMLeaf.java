@@ -1,4 +1,6 @@
-package randsampFM;
+package randsampFM.featureModel;
+
+import randsampFM.types.ConfSet;
 
 public final class FMLeaf extends FeatureModel {
 	

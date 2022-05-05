@@ -1,6 +1,7 @@
 package randsampFM;
 
 import de.neominik.uvl.ast.*;
+import randsampFM.featureModel.FeatureModel;
 import de.neominik.uvl.UVLParser;
 
 import java.util.Arrays;

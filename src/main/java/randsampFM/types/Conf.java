@@ -1,4 +1,4 @@
-package randsampFM;
+package randsampFM.types;
 
 import java.util.Set;
 import java.util.HashSet;

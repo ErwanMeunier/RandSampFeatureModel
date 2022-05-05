@@ -1,10 +1,12 @@
 /**
  * 
  */
-package randsampFM;
+package randsampFM.featureModel;
 
 //import java.util.ArrayList;
 import de.neominik.uvl.ast.*;
+import randsampFM.types.ConfSet;
+import randsampFM.types.Feature;
 
 import java.util.List;
 import java.util.Arrays;

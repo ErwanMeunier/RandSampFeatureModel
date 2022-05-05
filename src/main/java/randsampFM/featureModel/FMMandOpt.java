@@ -1,9 +1,11 @@
-package randsampFM;
+package randsampFM.featureModel;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import randsampFM.types.ConfSet;
 
 public final class FMMandOpt extends FeatureModel {
 			

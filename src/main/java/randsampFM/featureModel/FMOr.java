@@ -1,6 +1,10 @@
-package randsampFM;
+package randsampFM.featureModel;
 
 import java.util.stream.Collectors;
+
+import randsampFM.types.Conf;
+import randsampFM.types.ConfSet;
+
 import java.util.List;
 import java.util.Set;
 
