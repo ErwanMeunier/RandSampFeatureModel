@@ -3,5 +3,12 @@
   <groupId>erwanmeunier</groupId>
   <artifactId>randsampFM</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  
+  <dependencies>
+  <dependency>
+    <groupId>info.picocli</groupId>
+    <artifactId>picocli</artifactId>
+    <version>4.6.1</version>
+	</dependency>
+  </dependencies>
+  <!-- https://mvnrepository.com/artifact/info.picocli/picocli -->
 </project>

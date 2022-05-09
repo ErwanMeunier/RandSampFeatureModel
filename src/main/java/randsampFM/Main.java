@@ -4,10 +4,10 @@ import de.neominik.uvl.ast.*;
 import de.neominik.uvl.UVLParser;
 import randsampFM.featureModel.FeatureModel;
 
-/*import picocli.CommandLine;
+import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
-import picocli.CommandLine.Parameters;*/
+import picocli.CommandLine.Parameters;
 
 import java.util.Arrays;
 import java.nio.file.Files;
@@ -20,7 +20,7 @@ import java.io.IOException;
  * @version 0.1
  * */
 
-/*@Command(
+/*@Command( // TODO
 		name = "randsampfm", 
 		mixinStandardHelpOptions = true, 
 		version = "RandSampFeatureModel 0.1",
@@ -32,14 +32,15 @@ public final class Main {
 	final static String wd = System.getProperty("user.dir"); // working directory
 	
 	public static void main(String[] args) {
-		FeatureModel testFM = parseAndConvert("/src/test/resources/test1.uvl");
-		System.out.println(testFM.enumerate());
-		System.out.println(testFM.enumerate().size());
+		FeatureModel testFM = parseAndConvert("/src/test/resources/Feature_Models/Database/BerkeleyDB/berkeleydb.uvl");
+		
 		System.out.println(testFM.count());
 		
-		for(int i = 0; i<100; i++) {
+		//System.out.println(testFM.enumerate());
+		//System.out.println(testFM.enumerate().size());
+		/*for(int i = 0; i<100; i++) {
 			System.out.println(testFM.sample());
-		}
+		}*/
 	}
 	
 	public static UVLModel loadModel(final String filename) {
