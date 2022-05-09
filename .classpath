@@ -35,6 +35,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/uvl-parser-0.1.0-SNAPSHOT-standalone.jar"/>
+	<classpathentry kind="lib" path="/home/stagiaire-tasc/eclipse-workspace/RandSampFeatureModel/libs/ulv-parser/ulv-parser-standalone/0.1.0/uvl-parser-0.1.0-SNAPSHOT-standalone.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

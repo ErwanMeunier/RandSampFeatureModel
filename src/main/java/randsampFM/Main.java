@@ -1,8 +1,13 @@
 package randsampFM;
 
 import de.neominik.uvl.ast.*;
-import randsampFM.featureModel.FeatureModel;
 import de.neominik.uvl.UVLParser;
+import randsampFM.featureModel.FeatureModel;
+
+/*import picocli.CommandLine;
+import picocli.CommandLine.Command;
+import picocli.CommandLine.Option;
+import picocli.CommandLine.Parameters;*/
 
 import java.util.Arrays;
 import java.nio.file.Files;
@@ -12,8 +17,16 @@ import java.io.IOException;
 /*
  * @author Erwan Meunier
  * since 04/08/2022
+ * @version 0.1
  * */
 
+/*@Command(
+		name = "randsampfm", 
+		mixinStandardHelpOptions = true, 
+		version = "RandSampFeatureModel 0.1",
+		description = "Provides Feature Models enumeration, counting and sampling"
+		)
+*/
 public final class Main {
 
 	final static String wd = System.getProperty("user.dir"); // working directory

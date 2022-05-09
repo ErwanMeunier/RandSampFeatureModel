@@ -13,7 +13,10 @@ public final class FMLeaf extends FeatureModel {
 	}
 
 	public BigInteger count() {
-		return BigInteger.ONE;
+		if(this.nbConfigurations == null) {
+			this.nbConfigurations = BigInteger.ONE;
+		} 
+		return nbConfigurations;
 	}
 	
 	public ConfSet enumerate() {

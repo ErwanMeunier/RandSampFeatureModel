@@ -25,25 +25,27 @@ public final class FMMandOpt extends FeatureModel {
 
 	@Override
 	public BigInteger count() {
-		BigInteger optCount;
-		BigInteger mandCount;
-		
-		if(optChilds.isEmpty()) {
-			optCount = BigInteger.ONE;
-		} 
-		else 
-		{
-			optCount = optChilds.stream().map(x -> x.count().add(BigInteger.ONE)).reduce((a,b)->a.multiply(b)).get();
+		if(this.nbConfigurations == null) {
+			BigInteger optCount;
+			BigInteger mandCount;
+			
+			if(optChilds.isEmpty()) {
+				optCount = BigInteger.ONE;
+			} 
+			else 
+			{
+				optCount = optChilds.stream().map(x -> x.count().add(BigInteger.ONE)).reduce((a,b)->a.multiply(b)).get();
+			}
+			
+			if(mandChilds.isEmpty()) {
+				mandCount = BigInteger.ONE;
+			} 
+			else {
+				mandCount = mandChilds.stream().map(x -> x.count()).reduce((a,b)->a.multiply(b)).get();
+			}
+			this.nbConfigurations = mandCount.multiply(optCount);
 		}
-		
-		if(mandChilds.isEmpty()) {
-			mandCount = BigInteger.ONE;
-		} 
-		else {
-			mandCount = mandChilds.stream().map(x -> x.count()).reduce((a,b)->a.multiply(b)).get();
-		}
-		
-		return mandCount.multiply(optCount);
+		return nbConfigurations;
 	}
 	
 	public ConfSet enumerate() {

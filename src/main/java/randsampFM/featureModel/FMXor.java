@@ -22,7 +22,10 @@ public final class FMXor extends FeatureModel{
 	}
 	
 	public BigInteger count() {
-		return children.stream().map(x->x.count()).reduce(BigInteger.ZERO, (a,b)-> a.add(b));
+		if(this.nbConfigurations == null) {
+			nbConfigurations = children.stream().map(x->x.count()).reduce(BigInteger.ZERO, (a,b)-> a.add(b));
+		}
+		return nbConfigurations;
 	}
 	
 	public ConfSet enumerate() {

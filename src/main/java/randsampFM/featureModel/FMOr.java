@@ -21,7 +21,10 @@ public class FMOr extends FeatureModel {
 	}
 
 	public BigInteger count() {
-		return children.stream().map(x->x.count().add(BigInteger.ONE)).reduce(BigInteger.ONE, (a,b)-> a.multiply(b)).subtract(BigInteger.ONE);
+		if(this.nbConfigurations == null) {
+			nbConfigurations = children.stream().map(x->x.count().add(BigInteger.ONE)).reduce(BigInteger.ONE, (a,b)-> a.multiply(b)).subtract(BigInteger.ONE);
+		}
+		return nbConfigurations;
 	}
 	
 	public ConfSet enumerate() {

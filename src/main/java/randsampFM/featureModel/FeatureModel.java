@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.math.BigInteger;
@@ -21,9 +20,11 @@ import java.math.BigInteger;
 public abstract class FeatureModel {
 	
 	protected Feature label;
+	protected BigInteger nbConfigurations;
 	
 	public FeatureModel(String label) {
 		this.label = new Feature(label);
+		this.nbConfigurations = null;
 	}
 	
 	public static FeatureModel parseFeatureModel(final de.neominik.uvl.ast.Feature feature) {
@@ -156,6 +157,12 @@ public abstract class FeatureModel {
 			return label.toString();
 		}
 	}
+	
+	
+	/**
+	 * nbConfigurations is set to count() the first time count() is called
+	 * @return
+	 */
 	
 	public abstract BigInteger count();
 	
