@@ -68,5 +68,9 @@ public class Conf {
 		newSet.addAll(this.getInnerSet());
 		newSet.addAll(addedConf.getInnerSet());
 		return new Conf(newSet);
-	}	
+	}
+	
+	public boolean isEmpty() {
+		return innerSet.isEmpty();
+	}
 }

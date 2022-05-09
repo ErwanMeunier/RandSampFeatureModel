@@ -2,11 +2,15 @@ package randsampFM.featureModel;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 
 import randsampFM.types.ConfSet;
+import randsampFM.types.Conf;
 
 public final class FMMandOpt extends FeatureModel {
 			
@@ -82,7 +86,30 @@ public final class FMMandOpt extends FeatureModel {
 			throw new NoSuchElementException("Both mandStream and optStrem cannot be empty");
 		}
 
-		return root.expansion(result); // TODO : Exceptions handling 
+		return root.expansion(result); // TODO : Exceptions handling ?
+	}
+	
+	public Conf sample() {
+		BigDecimal draw; 
+		BigDecimal bound;
+		BigDecimal nbc = new BigDecimal(this.count()); // converts a BigInt into a BigDec
+		Conf result = new Conf(Set.of(this.label));
+		
+		for(FeatureModel fm : mandChilds) {
+			result = result.union(fm.sample());
+		}
+		
+		for(FeatureModel fm : optChilds) {
+			bound = (new BigDecimal(fm.count())).divide(nbc,10,RoundingMode.HALF_EVEN);
+			draw = BigDecimal.valueOf(Math.random());
+			int comparison = draw.compareTo(bound);
+			if(comparison == -1 || comparison == -0) {
+				result = result.union(fm.sample());
+			}
+		}
+		
+		
+		return result;
 	}
 
 }

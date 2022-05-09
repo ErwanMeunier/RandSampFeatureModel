@@ -2,40 +2,9 @@ namespace Root
 
 features
 	Root {abstract, extended__}	
-		alternative
-			A	
-				alternative
-					B
-					C
-					D
-			E	
-				alternative
-					NewFeature	
-						alternative
-							NewFeature6
-							NewFeature10	
-								optional
-									NewFeature15	
-										alternative
-											NewFeature17
-											NewFeature18
-											NewFeature19
-											NewFeature20
-							NewFeature11	
-								or
-									NewFeature14
-									NewFeature21
-									NewFeature22
-							NewFeature12	
-								optional
-									NewFeature16
-							NewFeature13
-					NewFeature3	
-						or
-							NewFeature5
-							NewFeature7
-							NewFeature8
-							NewFeature9
-			NewFeature2	
-				mandatory
-					NewFeature4
+		mandatory
+			A
+
+		optional
+			B
+			C

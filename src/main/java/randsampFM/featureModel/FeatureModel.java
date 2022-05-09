@@ -7,6 +7,7 @@ import de.neominik.uvl.ast.*;
 
 import randsampFM.types.ConfSet;
 import randsampFM.types.Feature;
+import randsampFM.types.Conf;
 
 import java.util.List;
 import java.util.Arrays;
@@ -129,8 +130,8 @@ public abstract class FeatureModel {
 			}
 			
 			break;
-			
-		case 3://CARD - WRONG
+		// DO NOT DELETE
+		/*case 3://CARD - WRONG 
 			currentGroup = groups.stream().filter(g -> g.getType().equals("cardinalities")).collect(Collectors.toList()).get(0);
 			
 			int lb = currentGroup.getLower();
@@ -138,8 +139,8 @@ public abstract class FeatureModel {
 			
 			children = Arrays.asList(currentGroup.getChildren());
 			result = new FMCard(feature.getName(),children,lb,ub);
-			break;
-			
+			break;*/
+		// DO NOT DELETE
 		default:
 			throw new  UnsupportedOperationException("FilteredTypes not consistent with typeIndex"); // cannot happen 
 		}
@@ -159,6 +160,8 @@ public abstract class FeatureModel {
 	public abstract BigInteger count();
 	
 	public abstract ConfSet enumerate();
+		
+	public abstract Conf sample(); // TODO : Factorizing sub-class source code
 
 	//TODO public enumerate
 	public static List<ConfSet> enumerate(List<FeatureModel> fmList, boolean isOptional) {

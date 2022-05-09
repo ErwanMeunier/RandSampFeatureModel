@@ -23,6 +23,10 @@ public final class Main {
 		System.out.println(testFM.enumerate());
 		System.out.println(testFM.enumerate().size());
 		System.out.println(testFM.count());
+		
+		for(int i = 0; i<100; i++) {
+			System.out.println(testFM.sample());
+		}
 	}
 	
 	public static UVLModel loadModel(final String filename) {

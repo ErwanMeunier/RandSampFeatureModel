@@ -1,8 +1,10 @@
 package randsampFM.featureModel;
 
 import randsampFM.types.ConfSet;
+import randsampFM.types.Conf;
 
 import java.math.BigInteger;
+import java.util.Set;
 
 public final class FMLeaf extends FeatureModel {
 	
@@ -16,5 +18,9 @@ public final class FMLeaf extends FeatureModel {
 	
 	public ConfSet enumerate() {
 		return ConfSet.singletonCS(this.label); // empty confSet
+	}
+	
+	public Conf sample() {
+		return new Conf(Set.of(label));
 	}
 }

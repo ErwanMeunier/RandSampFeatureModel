@@ -1,4 +1,4 @@
-package randsampFM.featureModel;
+/*package randsampFM.featureModel;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,3 +32,4 @@ public class FMCard extends FeatureModel{
 	
 	
 }
+*/
