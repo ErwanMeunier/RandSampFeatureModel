@@ -68,7 +68,7 @@ public final class Main implements Runnable {
 	
 	@Override
 	public void run() {
-		System.out.println(path);
+		//System.out.println(path);
 		
 		FeatureModel fm = parseAndConvert(path);
 		
