@@ -29,10 +29,11 @@ public class Conf {
 				c = signatureList[i];
 				tmpSig = tmpSig.append((String) c).append(",");
 			}
+			c = signatureList[signatureList.length-1];
+			tmpSig = tmpSig.append((String) c);
 		}
 		
-		c = signatureList[signatureList.length-1];
-		tmpSig = tmpSig.append((String) c);
+		
 		
 		signature = tmpSig.toString();
 	

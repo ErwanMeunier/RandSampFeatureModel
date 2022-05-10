@@ -43,7 +43,7 @@ public class FMOr extends FeatureModel {
 
 		while(result.isEmpty()) { // TODO : Very unlikely but the loop might not end...
 			for(FeatureModel fm : children) {
-				bound = (BigDecimal.ONE).divide(new BigDecimal(fm.count()),precision,RoundingMode.HALF_EVEN).doubleValue();
+				bound = (BigDecimal.ONE).divide(new BigDecimal(fm.count().add(BigInteger.ONE)),precision,RoundingMode.HALF_EVEN).doubleValue();
 				draw = generator.nextDouble(); // between 0.0 and 1.0
 
 				if(bound <= draw) { // Complemented probability
@@ -55,25 +55,3 @@ public class FMOr extends FeatureModel {
 		return result;
 	}
 }
-
-/*
- * public Conf sample() {
-		double draw; 
-		double bound; // between 0.0 and 1.0
-		Conf result = new Conf(Set.of(this.label));
-		
-		for(FeatureModel fm : mandChilds) {
-			result = result.union(fm.sample());
-		}
-		
-		for(FeatureModel fm : optChilds) {
-			bound = (BigDecimal.ONE).divide(new BigDecimal(fm.count()),100000,RoundingMode.HALF_EVEN).doubleValue();
-			draw = generator.nextDouble(); // between 0.0 and 1.0
-
-			if(bound <= draw) { // Complemented probability
-				result = result.union(fm.sample());
-			}
-		}
-		
-		return result;
-	}*/

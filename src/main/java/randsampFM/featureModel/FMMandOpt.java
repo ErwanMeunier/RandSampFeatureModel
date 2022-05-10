@@ -77,8 +77,8 @@ public final class FMMandOpt extends FeatureModel {
 		switch(nbEmpty) {
 		
 		case 0:
-			ConfSet tempMand = ConfSet.expansion(mandStream.collect(Collectors.toList()));
-			ConfSet tempOpt = ConfSet.expansion(optStream.collect(Collectors.toList()));
+			ConfSet tempMand = mandStream.reduce(ConfSet.emptyCS(), (a,b)->a.expansion(b));
+			ConfSet tempOpt = optStream.reduce(ConfSet.emptyCS(), (a,b)->a.expansion(b));
 			result = tempMand.expansion(tempOpt);
 			break;
 		
@@ -102,7 +102,7 @@ public final class FMMandOpt extends FeatureModel {
 		}
 		
 		for(FeatureModel fm : optChilds) {
-			bound = (BigDecimal.ONE).divide(new BigDecimal(fm.count()),precision,RoundingMode.HALF_EVEN).doubleValue();
+			bound = (BigDecimal.ONE).divide(new BigDecimal(fm.count().add(BigInteger.ONE)),precision,RoundingMode.HALF_EVEN).doubleValue();
 			draw = generator.nextDouble(); // between 0.0 and 1.0
 
 			if(bound <= draw) { // Complemented probability
