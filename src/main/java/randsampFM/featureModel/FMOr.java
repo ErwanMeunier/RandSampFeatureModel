@@ -10,14 +10,15 @@ import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.Set;
+import java.util.Random;
 
 public class FMOr extends FeatureModel {
 
 	List<FeatureModel> children;
 	
-	public FMOr(String label, List<de.neominik.uvl.ast.Feature> rawChildren) {
-		super(label);
-		this.children = rawChildren.stream().map(x -> parseFeatureModel(x)).collect(Collectors.toList());
+	public FMOr(String label, List<de.neominik.uvl.ast.Feature> rawChildren, final Random generator) {
+		super(label, generator);
+		this.children = rawChildren.stream().map(x -> parseFeatureModel(x,generator)).collect(Collectors.toList());
 	}
 
 	public BigInteger count() {
@@ -35,23 +36,44 @@ public class FMOr extends FeatureModel {
 		// TODO : Exceptions handling
 	}
 	
-		public Conf sample() {
-			BigDecimal draw; 
-			BigDecimal bound;
-			BigDecimal nbc = new BigDecimal(this.count()); // converts a BigInt into a BigDec
-			Conf result = new Conf(Set.of(this.label));
-			
-			while(result.isEmpty()) { // TODO : Very unlikely but the loop might not end...
-				for(FeatureModel fm : children) {
-					bound = (new BigDecimal(fm.count())).divide(nbc,10,RoundingMode.HALF_EVEN);
-					draw = BigDecimal.valueOf(Math.random());
-					int comparison = draw.compareTo(bound);
-					if(comparison == -1 || comparison == -0) {
-						result = result.union(fm.sample());
-					}
+	public Conf sample() {
+		double draw; 
+		double bound;
+		Conf result = new Conf(Set.of(this.label));
+
+		while(result.isEmpty()) { // TODO : Very unlikely but the loop might not end...
+			for(FeatureModel fm : children) {
+				bound = (BigDecimal.ONE).divide(new BigDecimal(fm.count()),precision,RoundingMode.HALF_EVEN).doubleValue();
+				draw = generator.nextDouble(); // between 0.0 and 1.0
+
+				if(bound <= draw) { // Complemented probability
+					result = result.union(fm.sample());
 				}
 			}
-			
-			return result;
 		}
+
+		return result;
+	}
 }
+
+/*
+ * public Conf sample() {
+		double draw; 
+		double bound; // between 0.0 and 1.0
+		Conf result = new Conf(Set.of(this.label));
+		
+		for(FeatureModel fm : mandChilds) {
+			result = result.union(fm.sample());
+		}
+		
+		for(FeatureModel fm : optChilds) {
+			bound = (BigDecimal.ONE).divide(new BigDecimal(fm.count()),100000,RoundingMode.HALF_EVEN).doubleValue();
+			draw = generator.nextDouble(); // between 0.0 and 1.0
+
+			if(bound <= draw) { // Complemented probability
+				result = result.union(fm.sample());
+			}
+		}
+		
+		return result;
+	}*/

@@ -16,19 +16,25 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.math.BigInteger;
+import java.util.Random;
 
 public abstract class FeatureModel {
 	
+	protected final static int precision = 1000;
+	
 	protected Feature label;
 	protected BigInteger nbConfigurations;
+	protected Random generator;
 	
-	public FeatureModel(String label) {
+	public FeatureModel(String label, final Random generator) {
 		this.label = new Feature(label);
 		this.nbConfigurations = null;
+		this.generator = generator;
 	}
 	
-	public static FeatureModel parseFeatureModel(final de.neominik.uvl.ast.Feature feature) {
+	public static FeatureModel parseFeatureModel(final de.neominik.uvl.ast.Feature feature, final Random generator) {
 		List<Group> groups = Arrays.asList(feature.getGroups()); // retrieves all the groups under the feature
+		
 		/* 
 		 * 0 -> OR
 		 * 1 -> XOR
@@ -91,13 +97,13 @@ public abstract class FeatureModel {
 		case 0: //OR
 			currentGroup = groups.stream().filter(g -> g.getType().equals("or")).findFirst().get();
 			children = Arrays.asList(currentGroup.getChildren());
-			result = new FMOr(feature.getName(),children);
+			result = new FMOr(feature.getName(),children, generator);
 			break;
 			
 		case 1://XOR
 			currentGroup = groups.stream().filter(g -> g.getType().equals("alternative")).findFirst().get();
 			children = Arrays.asList(currentGroup.getChildren());
-			result = new FMXor(feature.getName(),children);
+			result = new FMXor(feature.getName(),children, generator);
 			break;
 			
 		case 2://MANDOPT
@@ -127,7 +133,7 @@ public abstract class FeatureModel {
 			if(bothEmpty) {
 				throw new NoSuchElementException("Both Mandatory and optional groups are empty");
 			} else {
-				result = new FMMandOpt(feature.getName(), rawMandChilds, rawOptChilds);
+				result = new FMMandOpt(feature.getName(), rawMandChilds, rawOptChilds, generator);
 			}
 			
 			break;

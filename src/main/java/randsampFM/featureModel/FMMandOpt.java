@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.util.Random;
 
 import randsampFM.types.ConfSet;
 import randsampFM.types.Conf;
@@ -17,10 +18,10 @@ public final class FMMandOpt extends FeatureModel {
 	List<FeatureModel> mandChilds;
 	List<FeatureModel> optChilds;
 	
-	public FMMandOpt(String label, List<de.neominik.uvl.ast.Feature> rawMandChilds , List<de.neominik.uvl.ast.Feature> rawOptChilds) {
-		super(label);
-		mandChilds = rawMandChilds.stream().map(x -> parseFeatureModel(x)).collect(Collectors.toList());
-		optChilds = rawOptChilds.stream().map(x -> parseFeatureModel(x)).collect(Collectors.toList());
+	public FMMandOpt(String label, List<de.neominik.uvl.ast.Feature> rawMandChilds , List<de.neominik.uvl.ast.Feature> rawOptChilds, Random generator) {
+		super(label, generator);
+		mandChilds = rawMandChilds.stream().map(x -> parseFeatureModel(x, generator)).collect(Collectors.toList());
+		optChilds = rawOptChilds.stream().map(x -> parseFeatureModel(x, generator)).collect(Collectors.toList());
 	}
 
 	@Override
@@ -92,9 +93,8 @@ public final class FMMandOpt extends FeatureModel {
 	}
 	
 	public Conf sample() {
-		BigDecimal draw; 
-		BigDecimal bound;
-		BigDecimal nbc = new BigDecimal(this.count()); // converts a BigInt into a BigDec
+		double draw; 
+		double bound; // between 0.0 and 1.0
 		Conf result = new Conf(Set.of(this.label));
 		
 		for(FeatureModel fm : mandChilds) {
@@ -102,14 +102,13 @@ public final class FMMandOpt extends FeatureModel {
 		}
 		
 		for(FeatureModel fm : optChilds) {
-			bound = (new BigDecimal(fm.count())).divide(nbc,10,RoundingMode.HALF_EVEN);
-			draw = BigDecimal.valueOf(Math.random());
-			int comparison = draw.compareTo(bound);
-			if(comparison == -1 || comparison == -0) {
+			bound = (BigDecimal.ONE).divide(new BigDecimal(fm.count()),precision,RoundingMode.HALF_EVEN).doubleValue();
+			draw = generator.nextDouble(); // between 0.0 and 1.0
+
+			if(bound <= draw) { // Complemented probability
 				result = result.union(fm.sample());
 			}
 		}
-		
 		
 		return result;
 	}

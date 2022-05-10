@@ -5,8 +5,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.math.BigInteger;
 import java.math.BigDecimal;
-import java.lang.Math;
 import java.math.RoundingMode;
+import java.util.Random;
 
 import randsampFM.types.Conf;
 import randsampFM.types.ConfSet;
@@ -15,9 +15,9 @@ public final class FMXor extends FeatureModel{
 
 	List<FeatureModel> children;
 	
-	public FMXor(String label, List<de.neominik.uvl.ast.Feature> rawChildren) {
-		super(label);
-		this.children = rawChildren.stream().map(x -> parseFeatureModel(x)).collect(Collectors.toList());
+	public FMXor(String label, List<de.neominik.uvl.ast.Feature> rawChildren, final Random generator) {
+		super(label, generator);
+		this.children = rawChildren.stream().map(x -> parseFeatureModel(x,generator)).collect(Collectors.toList());
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -41,22 +41,34 @@ public final class FMXor extends FeatureModel{
 	 * @param nbc
 	 */
 	public Conf sample() {
-		BigDecimal draw; 
-		BigDecimal bound;
-		BigDecimal nbc = new BigDecimal(this.count()); // converts a BigInt into a BigDec
 		Conf result = new Conf(Set.of(this.label));
 		
 		/* a, b BigDecimal
 		 * a.divide(b, scale, rounding method)
 		 * */
-		for(FeatureModel fm : children) {
-			bound = (new BigDecimal(fm.count())).divide(nbc,10,RoundingMode.HALF_EVEN);
-			draw = BigDecimal.valueOf(Math.random());
-			int comparison = draw.compareTo(bound);
-			if(comparison == -1 || comparison == -0) {
-				result = result.union(fm.sample());
-			}
-		}
+		result = result.union(this.choose().sample());
+		
 		return result;
+	}
+	
+	private FeatureModel choose(){
+		double r = generator.nextDouble();
+		BigDecimal nbConf = new BigDecimal(this.count());
+		
+
+		Object[] childs = children.stream().map(x -> new BigDecimal(x.count())).toArray();
+		
+		double p;
+		int i = 0;
+		BigDecimal child;
+		
+		while(r >= 0) {
+			child = (BigDecimal) childs[i];
+			p = child.divide(nbConf,precision,RoundingMode.HALF_EVEN).doubleValue();
+			r = r - p;
+			i++;
+		}
+		
+		return children.get(i-1);
 	}
 }

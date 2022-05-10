@@ -9,7 +9,7 @@ import java.util.Set;
 public final class FMLeaf extends FeatureModel {
 	
 	public FMLeaf(String label) {
-		super(label);
+		super(label, null); // no need to have a random number generator here
 	}
 
 	public BigInteger count() {
@@ -20,7 +20,7 @@ public final class FMLeaf extends FeatureModel {
 	}
 	
 	public ConfSet enumerate() {
-		return ConfSet.singletonCS(this.label); // empty confSet
+		return ConfSet.singletonCS(this.label);
 	}
 	
 	public Conf sample() {
