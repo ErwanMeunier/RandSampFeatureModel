@@ -25,10 +25,17 @@ public class ConfSet {
 		
 		// In order to concatenate efficiently
 		StringBuilder tmpSig = new StringBuilder("");
+		Object c;
 		
-		for(Object c : signatureList) {
-			tmpSig = tmpSig.append("[" + (String) c).append("],");
+		if(signatureList.length > 0) {
+			for(int i = 0; i< signatureList.length-1; i++) {
+				c = signatureList[i];
+				tmpSig = tmpSig.append("[" + (String) c).append("],");
+			}
 		}
+				
+		c = signatureList[signatureList.length-1];
+		tmpSig = tmpSig.append("[" + (String) c).append("]");
 		
 		signature = tmpSig.toString();
 	}
