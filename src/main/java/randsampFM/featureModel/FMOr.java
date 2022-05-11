@@ -39,7 +39,7 @@ public class FMOr extends FeatureModel {
 	public Conf sample() {
 		double draw; 
 		double bound;
-		Conf result = new Conf(Set.of(this.label));
+		Conf result = new Conf();
 
 		while(result.isEmpty()) { // TODO : Very unlikely but the loop might not end...
 			for(FeatureModel fm : children) {
@@ -52,6 +52,6 @@ public class FMOr extends FeatureModel {
 			}
 		}
 
-		return result;
+		return result.union(new Conf(Set.of(this.label)));
 	}
 }

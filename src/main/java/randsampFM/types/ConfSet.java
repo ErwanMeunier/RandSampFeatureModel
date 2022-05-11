@@ -60,7 +60,7 @@ public class ConfSet {
 		return new ConfSet(Set.of(new Conf()));
 	}
 	
-	private Set<Conf> getInnerSet(){
+	public Set<Conf> getInnerSet(){
 		return Set.copyOf(innerSet);
 	}
 	

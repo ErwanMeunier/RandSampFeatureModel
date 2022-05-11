@@ -3,6 +3,7 @@ package randsampFM;
 import de.neominik.uvl.ast.*;
 import de.neominik.uvl.UVLParser;
 import randsampFM.featureModel.FeatureModel;
+import randsampFM.types.Conf;
 import randsampFM.types.ConfSet;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -10,11 +11,19 @@ import picocli.CommandLine.Option;
 //import picocli.CommandLine.Parameters;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+//import java.util.List;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.Random;
-//import java.util.ArrayList;
+//import java.util.Set;
+import java.util.stream.Collectors;
+//import java.util.stream.IntStream;
+import java.util.Map;
+import java.util.ArrayList;
 
 /*
  * @author Erwan Meunier
@@ -59,6 +68,8 @@ public final class Main implements Runnable {
 	@Option(names = {"-P", "--path"}, required = true, description = ".ulv file from which the feature model will be parsed.")
 	private String path;
 	
+	@Option(names = {"-b"}, description = "Benchmark mode.")
+	private long samplesize = 0;
 	/* IDEAS
 	 * TODO : 
 	 * output(s) into a file
@@ -72,28 +83,33 @@ public final class Main implements Runnable {
 		
 		FeatureModel fm = parseAndConvert(path);
 		
-		if(counting) {
-			System.out.println("COUNTING");
-			System.out.println("Number of configurations: " + fm.count());
-			System.out.println("Done");
-		}
-		
-		if(nbSamples>0) {
-			System.out.println("SAMPLING");
-			for(long i=1; i<=nbSamples; i++) {
-				System.out.println("[" + i + "]:" + fm.sample());
+		if(samplesize > 0) {
+			benchmark(fm, samplesize);
+		} else {
+			if(counting) {
+				System.out.println("COUNTING");
+				System.out.println("Number of configurations: " + fm.count());
+				System.out.println("Done");
 			}
-			System.out.println("Done");
+			
+			if(nbSamples>0) {
+				System.out.println("SAMPLING");
+				for(long i=1; i<=nbSamples; i++) {
+					System.out.println("[" + i + "]:" + fm.sample());
+				}
+				System.out.println("Done");
+			}
+			
+			if(enumeration) {
+				System.out.println("ENUMERATION");
+				ConfSet result = fm.enumerate();
+				System.out.println(result);
+				System.out.println("Done");
+			}
+			
+			System.out.print("END");
 		}
 		
-		if(enumeration) {
-			System.out.println("ENUMERATION");
-			ConfSet result = fm.enumerate();
-			System.out.println(result);
-			System.out.println("Done");
-		}
-		
-		System.out.print("END");
 	}
 	
 	public static void main(String[] args) {
@@ -101,7 +117,7 @@ public final class Main implements Runnable {
 		System.exit(exitCode);
 	}
 	
-	public static UVLModel loadModel(final String filename) {
+	private UVLModel loadModel(final String filename) {
 		try {
 			return (UVLModel) UVLParser.parse(Files.readString(Path.of(filename)));
 	    } catch (IOException e) {
@@ -111,13 +127,50 @@ public final class Main implements Runnable {
 	    }
 	}
 
-	public static FeatureModel uvlModeltoFM(final UVLModel uvlmodel){
+	private FeatureModel uvlModeltoFM(final UVLModel uvlmodel){
 		de.neominik.uvl.ast.Feature rootFeature = Arrays.asList(uvlmodel.getRootFeatures()).stream().findFirst().get();
 		return FeatureModel.parseFeatureModel(rootFeature, generator);
 	}
 	
-	public static FeatureModel parseAndConvert(final String filename) { // mainly intended to the benchmark
+	private FeatureModel parseAndConvert(final String filename) { // mainly intended to the benchmark
 		return uvlModeltoFM(loadModel(filename));
+	}
+	
+	private void benchmark(final FeatureModel fm, final long nbOfSamples){
+		BigInteger nbConf = fm.count();
+		final long threshold = 5000;
+		//final long nbOfSamples = 10000;
+		final BigInteger bigThreshold = BigInteger.valueOf(threshold);
+		int comparison = nbConf.compareTo(bigThreshold);
+
+		if(comparison == 1) {
+			System.out.println("WARNING : Benchmark may not end in a reasonable time. Benchmark aborted.");
+		}else {
+			ConfSet enumerationOfFM = fm.enumerate();
+			
+			int smallNbConf = nbConf.intValueExact();
+			
+			ArrayList<Conf> configs = new ArrayList<Conf>(enumerationOfFM.getInnerSet().stream().toList()); // add .sorted() ?
+			
+			Map<Conf, Integer> intToconf = fm.enumerate().getInnerSet().stream().map(x -> new Conf[] {x,x}).collect(Collectors.toMap(e -> e[0], e -> configs.indexOf(e[0])));
+			//associate configs index and conf
+			
+			ArrayList<Integer> rawData = new ArrayList<Integer>(Collections.nCopies(smallNbConf, 0));
+			// ArrayList full of zeros
+			
+			for(int i = 0; i < nbOfSamples; i++) {
+				//System.out.print(i);
+				Conf tmp = fm.sample();
+				//System.out.println(tmp);
+				int index = intToconf.get(tmp);
+				rawData.set(index, rawData.get(index)+1);
+			}
+		
+			List<Double> data = rawData.stream().map(x -> (double) x/nbOfSamples).toList();
+					
+			System.out.println(data);			
+		}
+
 	}
 	
 }
