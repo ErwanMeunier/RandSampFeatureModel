@@ -3,8 +3,35 @@ namespace Root
 features
 	Root {abstract, extended__}	
 		mandatory
-			A
+			A	
+				or
+					NewFeature
+					NewFeature2
+					NewFeature3
 
 		optional
-			B
-			C
+			B	
+				or
+					NewFeature4	
+						mandatory
+							NewFeature10
+					NewFeature5	
+						mandatory
+							NewFeature9	
+								or
+									NewFeature11
+									NewFeature12
+									NewFeature13
+									NewFeature17
+									NewFeature18
+									NewFeature19
+									NewFeature20
+					NewFeature6	
+						alternative
+							NewFeature8
+							NewFeature14
+							NewFeature15
+							NewFeature16
+			C	
+				optional
+					NewFeature7

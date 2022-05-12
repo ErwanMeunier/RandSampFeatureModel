@@ -1,0 +1,7 @@
+namespace Root
+
+features
+	Root {abstract}	
+		optional
+			Base
+			Base2

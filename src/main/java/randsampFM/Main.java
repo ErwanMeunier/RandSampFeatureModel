@@ -1,21 +1,29 @@
 package randsampFM;
 
-import de.neominik.uvl.ast.*;
-import de.neominik.uvl.UVLParser;
 import randsampFM.featureModel.FeatureModel;
 import randsampFM.types.Conf;
 import randsampFM.types.ConfSet;
+
+import de.neominik.uvl.ast.*;
+import de.neominik.uvl.UVLParser;
+
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 //import picocli.CommandLine.Parameters;
 
+//import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.exc.StreamWriteException;
+import com.fasterxml.jackson.databind.DatabindException;
+//import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-//import java.util.List;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Random;
@@ -40,7 +48,6 @@ import java.util.ArrayList;
 
 public final class Main implements Runnable {
 	
-	@Deprecated
 	public final static String wd = System.getProperty("user.dir"); // working directory
 	
 	public final static long seed = 877; // prime number
@@ -77,6 +84,10 @@ public final class Main implements Runnable {
 	 * verbose mode
 	 * */
 	
+	/*public class Benchmark{
+		
+	}*/
+	
 	@Override
 	public void run() {
 		//System.out.println(path);
@@ -84,7 +95,43 @@ public final class Main implements Runnable {
 		FeatureModel fm = parseAndConvert(path);
 		
 		if(samplesize > 0) {
-			benchmark(fm, samplesize);
+			System.out.println("BENCHMARK MODE");
+			System.out.println("WARNING: others options will be ignored");
+			
+			ArrayList<List<Integer>> benchResult = new ArrayList<List<Integer>>(Collections.nCopies(100, List.of()));
+			
+			
+			for(int i = 0; i<100; i+=1) {
+				System.out.println(i);
+				benchResult.set(i, benchmark(fm,i*1000));
+			}
+						
+			class Data{
+				@SuppressWarnings("unused")
+				public List<List<Integer>> raw = benchResult;
+				//@SuppressWarnings("unused")
+				//public long sampleSize = 100000;
+			}
+			
+			System.out.println("Done");
+			
+			ObjectMapper mapper = new ObjectMapper();
+			
+			try {
+				mapper.writeValue(new File(wd + "/src/test/resources/Benchmarks/bench.json"), new Data());
+			} catch (StreamWriteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (DatabindException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			System.out.println("Output successfully saved");
+			
 		} else {
 			if(counting) {
 				System.out.println("COUNTING");
@@ -136,13 +183,15 @@ public final class Main implements Runnable {
 		return uvlModeltoFM(loadModel(filename));
 	}
 	
-	private void benchmark(final FeatureModel fm, final long nbOfSamples){
+	private List<Integer> benchmark(final FeatureModel fm, final long nbOfSamples){
 		BigInteger nbConf = fm.count();
-		final long threshold = 5000;
-		//final long nbOfSamples = 10000;
+		final long threshold = 100000;
 		final BigInteger bigThreshold = BigInteger.valueOf(threshold);
 		int comparison = nbConf.compareTo(bigThreshold);
-
+		
+		//List<Double> data = List.of();
+		List<Integer> data = List.of();
+		
 		if(comparison == 1) {
 			System.out.println("WARNING : Benchmark may not end in a reasonable time. Benchmark aborted.");
 		}else {
@@ -159,18 +208,15 @@ public final class Main implements Runnable {
 			// ArrayList full of zeros
 			
 			for(int i = 0; i < nbOfSamples; i++) {
-				//System.out.print(i);
 				Conf tmp = fm.sample();
-				//System.out.println(tmp);
 				int index = intToconf.get(tmp);
 				rawData.set(index, rawData.get(index)+1);
 			}
 		
-			List<Double> data = rawData.stream().map(x -> (double) x/nbOfSamples).toList();
-					
-			System.out.println(data);			
+			//data = rawData.stream().map(x -> (double) x/nbOfSamples).toList();
+			data = rawData.stream().toList();
 		}
-
+		return data;
 	}
 	
 }

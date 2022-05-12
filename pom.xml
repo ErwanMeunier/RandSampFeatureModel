@@ -4,10 +4,15 @@
   <artifactId>randsampFM</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <dependencies>
-  <dependency>
-    <groupId>info.picocli</groupId>
-    <artifactId>picocli</artifactId>
-    <version>4.6.1</version>
+  	<dependency>
+	    <groupId>info.picocli</groupId>
+	    <artifactId>picocli</artifactId>
+	    <version>4.6.1</version>
+	</dependency>
+	<dependency>
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>2.13.2.2</version>
 	</dependency>
   </dependencies>
   <!-- https://mvnrepository.com/artifact/info.picocli/picocli -->

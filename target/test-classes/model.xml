@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<featureModel>
+	<properties>
+		<graphics key="autolayoutconstraints" value="false"/>
+		<graphics key="legendposition" value="1398,186"/>
+		<graphics key="legendautolayout" value="false"/>
+		<graphics key="showshortnames" value="false"/>
+		<graphics key="layout" value="horizontal"/>
+		<graphics key="showcollapsedconstraints" value="true"/>
+		<graphics key="legendhidden" value="false"/>
+		<graphics key="layoutalgorithm" value="1"/>
+	</properties>
+	<struct>
+		<and mandatory="true" name="SparkTEFeatures">
+			<alt mandatory="true" name="ModelRepresentation">
+				<and name="Sequential">
+					<alt mandatory="true" name="DynamicLinkNavigation">
+						<feature name="iterateOnList"/>
+						<feature name="accessOnHashMap"/>
+					</alt>
+				</and>
+				<and name="Distributed">
+					<alt mandatory="true" name="GraphXLinkNavigation">
+						<feature name="tripletsFiltering"/>
+						<feature name="pregelIteration"/>
+					</alt>
+				</and>
+			</alt>
+			<alt mandatory="true" name="TuplesGeneration">
+				<and name="ByRuleTuples">
+					<feature name="Distributively"/>
+					<feature name="distinct"/>
+				</and>
+				<feature name="FullTuples"/>
+			</alt>
+			<alt mandatory="true" name="ModelStorage">
+				<and name="onDisk">
+					<feature mandatory="true" name="file"/>
+				</and>
+				<feature name="inMemory"/>
+				<and hidden="true" name="remote">
+					<feature mandatory="true" name="database"/>
+				</and>
+			</alt>
+			<and mandatory="true" name="TraceLinksNavigation">
+				<alt mandatory="true" name="onStruct">
+					<feature name="resolveArray"/>
+					<feature name="resolveList"/>
+					<feature name="resolveDataFrame"/>
+					<feature name="resolveHashMap"/>
+				</alt>
+				<feature name="byId"/>
+			</and>
+			<and mandatory="true" name="ApplyOutputLinks">
+				<feature name="Distinct"/>
+				<alt mandatory="true" name="Apply">
+					<feature name="applyFromTL"/>
+					<feature name="applyWithInstantiate"/>
+				</alt>
+			</and>
+			<alt mandatory="true" name="GatheringVariable">
+				<feature name="Fold"/>
+				<feature name="Collect"/>
+			</alt>
+			<alt mandatory="true" name="VariableSharing">
+				<feature name="Broadcast"/>
+				<feature name="Join"/>
+			</alt>
+		</and>
+	</struct>
+	<constraints>
+		<rule>
+			<imp>
+				<var>Join</var>
+				<var>resolveDataFrame</var>
+			</imp>
+		</rule>
+		<rule>
+			<imp>
+				<var>resolveDataFrame</var>
+				<var>byId</var>
+			</imp>
+		</rule>
+	</constraints>
+</featureModel>
