@@ -18,7 +18,9 @@ public class FMCard extends FeatureModel{
 	
 	
 	public FMCard(String label, List<de.neominik.uvl.ast.Feature> rawChildren, int lb, int ub, Random generator) {
+		
 		super(label,generator);
+		throw new UnsupportedOperationException();
 		//lowerBound = lb;
 		//upperBound = ub;
 		//this.children = rawChildren.stream().map(x -> parseFeatureModel(x,generator)).collect(Collectors.toList());
