@@ -29,6 +29,9 @@ import java.math.BigInteger;
 import java.util.Random;
 //import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.time.StopWatch;
+
 //import java.util.stream.IntStream;
 import java.util.Map;
 import java.util.ArrayList;
@@ -98,40 +101,16 @@ public final class Main implements Runnable {
 			System.out.println("BENCHMARK MODE");
 			System.out.println("WARNING: others options will be ignored");
 			
-			ArrayList<List<Integer>> benchResult = new ArrayList<List<Integer>>(Collections.nCopies(100, List.of()));
+			fm.count();
 			
+			long time = benchTimeSample(samplesize,fm);
+			double avgtime = (double) time/samplesize;
 			
-			for(int i = 0; i<100; i+=1) {
-				System.out.println(i);
-				benchResult.set(i, benchmark(fm,i*1000));
-			}
-						
-			class Data{
-				@SuppressWarnings("unused")
-				public List<List<Integer>> raw = benchResult;
-				//@SuppressWarnings("unused")
-				//public long sampleSize = 100000;
-			}
+			System.out.println("Sample size: " + samplesize);
+			System.out.println("Time: " + time);
+			System.out.println("Average time: " + avgtime);
 			
-			System.out.println("Done");
-			
-			ObjectMapper mapper = new ObjectMapper();
-			
-			try {
-				mapper.writeValue(new File(wd + "/src/test/resources/Benchmarks/bench.json"), new Data());
-			} catch (StreamWriteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (DatabindException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			System.out.println("Output successfully saved");
-			
+			System.out.println("Done");			
 		} else {
 			if(counting) {
 				System.out.println("COUNTING");
@@ -219,4 +198,47 @@ public final class Main implements Runnable {
 		return data;
 	}
 	
+	public static long benchTimeSample(long nbSamples, FeatureModel fm) {
+		StopWatch watch = new StopWatch();
+		watch.start();
+		for(long i = 0 ; i < nbSamples; i++) {
+			fm.sample();
+		}
+		watch.stop();
+		return watch.getTime();
+	}
+	
 }
+
+/*BENCHMARK PVALUE
+ * 
+ * ArrayList<List<Integer>> benchResult = new ArrayList<List<Integer>>(Collections.nCopies(100, List.of()));			
+
+for(int i = 0; i<100; i+=1) {
+	System.out.println(i);
+	benchResult.set(i, benchmark(fm,(i+1)*800));
+}
+			
+class Data{
+	@SuppressWarnings("unused")
+	public List<List<Integer>> raw = benchResult;
+	//@SuppressWarnings("unused")
+	//public long sampleSize = 100000;
+}
+
+ObjectMapper mapper = new ObjectMapper();
+			
+			try {
+				mapper.writeValue(new File(wd + "/src/test/resources/Benchmarks/bench.json"), new Data());
+			} catch (StreamWriteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (DatabindException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			System.out.println("Output successfully saved");*/

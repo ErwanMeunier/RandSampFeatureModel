@@ -1,0 +1,6 @@
+namespace Root
+
+features
+	Root {abstract, extended__}	
+		optional
+			Base
