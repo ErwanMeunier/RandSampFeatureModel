@@ -1,7 +1,23 @@
 namespace Root
 
 features
-	Root {abstract}	
+	R {abstract}	
+		mandatory
+			A	
+				alternative
+					D
+					E
+					F
+
 		optional
-			Base
-			Base2
+			B	
+				mandatory
+					G	
+						or
+							H
+							I
+							J
+			C
+
+constraints
+	E => C

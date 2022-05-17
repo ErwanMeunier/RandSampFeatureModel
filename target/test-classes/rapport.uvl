@@ -1,0 +1,20 @@
+namespace Root
+
+features
+	Voiture {abstract, extended__}	
+		mandatory
+			Scellerie	
+				alternative
+					Tissu
+					Cuir
+					Skai
+
+		optional
+			GPS	
+				mandatory
+					Cartes	
+						or
+							France
+							Allemagne
+							Italie
+			Climatisation
