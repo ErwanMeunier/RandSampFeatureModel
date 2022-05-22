@@ -11,7 +11,6 @@ public class Feature {
 		this.name = name;
 	}
 
-	@Deprecated
 	public String getName() {
 		return name;
 	}
@@ -30,7 +29,7 @@ public class Feature {
 		
 		Feature tempFeature = (Feature) obj; // type casting (ClassCastException cannot happen because types have already been checked above)
 		
-		return (tempFeature.getName()==this.name);
+		return (tempFeature.getName().equals(this.name));
 	}
 	
 	@Override
