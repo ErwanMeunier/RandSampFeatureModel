@@ -6,7 +6,7 @@ import randsampFM.types.Conf;
 import java.math.BigInteger;
 import java.util.Set;
 
-public final class FMLeaf extends FeatureModel {
+public final class FMLeaf extends FeatureDiagram {
 	
 	public FMLeaf(String label) {
 		super(label, null); // no need to have a random number generator here

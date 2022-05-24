@@ -12,13 +12,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.Random;
 
-public class FMOr extends FeatureModel {
+public class FMOr extends FeatureDiagram {
 
-	List<FeatureModel> children;
+	List<FeatureDiagram> children;
 	
 	public FMOr(String label, List<de.neominik.uvl.ast.Feature> rawChildren, final Random generator) {
 		super(label, generator);
-		this.children = rawChildren.stream().map(x -> parseFeatureModel(x,generator)).collect(Collectors.toList());
+		this.children = rawChildren.stream().map(x -> parseFeatureDiagram(x,generator)).collect(Collectors.toList());
 	}
 
 	public BigInteger count() {
@@ -42,7 +42,7 @@ public class FMOr extends FeatureModel {
 		Conf result = new Conf();
 
 		while(result.isEmpty()) { // TODO : Very unlikely but the loop might not end...
-			for(FeatureModel fm : children) {
+			for(FeatureDiagram fm : children) {
 				bound = (BigDecimal.ONE).divide(new BigDecimal(fm.count().add(BigInteger.ONE)),precision,RoundingMode.HALF_EVEN).doubleValue();
 				draw = generator.nextDouble(); // between 0.0 and 1.0
 

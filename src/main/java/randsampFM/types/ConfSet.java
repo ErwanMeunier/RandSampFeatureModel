@@ -1,6 +1,3 @@
-/**
- * 
- */
 package randsampFM.types;
 
 import java.util.Set;

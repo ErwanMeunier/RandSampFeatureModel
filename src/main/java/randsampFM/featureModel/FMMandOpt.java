@@ -13,15 +13,15 @@ import java.util.Random;
 import randsampFM.types.ConfSet;
 import randsampFM.types.Conf;
 
-public final class FMMandOpt extends FeatureModel {
+public final class FMMandOpt extends FeatureDiagram {
 			
-	List<FeatureModel> mandChilds;
-	List<FeatureModel> optChilds;
+	List<FeatureDiagram> mandChilds;
+	List<FeatureDiagram> optChilds;
 	
 	public FMMandOpt(String label, List<de.neominik.uvl.ast.Feature> rawMandChilds , List<de.neominik.uvl.ast.Feature> rawOptChilds, Random generator) {
 		super(label, generator);
-		mandChilds = rawMandChilds.stream().map(x -> parseFeatureModel(x, generator)).collect(Collectors.toList());
-		optChilds = rawOptChilds.stream().map(x -> parseFeatureModel(x, generator)).collect(Collectors.toList());
+		mandChilds = rawMandChilds.stream().map(x -> parseFeatureDiagram(x, generator)).collect(Collectors.toList());
+		optChilds = rawOptChilds.stream().map(x -> parseFeatureDiagram(x, generator)).collect(Collectors.toList());
 	}
 
 	@Override
@@ -97,11 +97,11 @@ public final class FMMandOpt extends FeatureModel {
 		double bound; // between 0.0 and 1.0
 		Conf result = new Conf(Set.of(this.label));
 		
-		for(FeatureModel fm : mandChilds) {
+		for(FeatureDiagram fm : mandChilds) {
 			result = result.union(fm.sample());
 		}
 		
-		for(FeatureModel fm : optChilds) {
+		for(FeatureDiagram fm : optChilds) {
 			bound = (BigDecimal.ONE).divide(new BigDecimal(fm.count().add(BigInteger.ONE)),precision,RoundingMode.HALF_EVEN).doubleValue();
 			draw = generator.nextDouble(); // between 0.0 and 1.0
 

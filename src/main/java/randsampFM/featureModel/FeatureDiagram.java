@@ -18,21 +18,21 @@ import java.util.NoSuchElementException;
 import java.math.BigInteger;
 import java.util.Random;
 
-public abstract class FeatureModel {
+public abstract class FeatureDiagram {
 	
-	protected final static int precision = 1000;
+	protected final static int precision = 100;
 	
 	protected Feature label;
 	protected BigInteger nbConfigurations;
 	protected Random generator;
 	
-	public FeatureModel(String label, final Random generator) {
+	public FeatureDiagram(String label, final Random generator) {
 		this.label = new Feature(label);
 		this.nbConfigurations = null;
 		this.generator = generator;
 	}
 	
-	public static FeatureModel parseFeatureModel(final de.neominik.uvl.ast.Feature feature, final Random generator) {
+	public static FeatureDiagram parseFeatureDiagram(final de.neominik.uvl.ast.Feature feature, final Random generator) {
 		List<Group> groups = Arrays.asList(feature.getGroups()); // retrieves all the groups under the feature
 		
 		/* 
@@ -59,10 +59,11 @@ public abstract class FeatureModel {
 			case "optional":
 				nbTypes.set(2, nbTypes.get(2)+1); // same box than optional
 				break;
-			case "cardinalities":
+			case "cardinality":
 				nbTypes.set(3, nbTypes.get(3)+1);
 				break;
 			default:
+				System.out.println(group.getType());
 				throw new  UnsupportedOperationException("Type not handled.");
 			}
 		}
@@ -82,7 +83,7 @@ public abstract class FeatureModel {
 			}
 		}
 		
-		FeatureModel result;
+		FeatureDiagram result;
 		
 		List<de.neominik.uvl.ast.Feature> children;
 		
@@ -137,17 +138,17 @@ public abstract class FeatureModel {
 			}
 			
 			break;
-		// DO NOT DELETE
-		/*case 3://CARD - WRONG 
-			currentGroup = groups.stream().filter(g -> g.getType().equals("cardinalities")).collect(Collectors.toList()).get(0);
+			
+		case 3://CARD - WRONG 
+			currentGroup = groups.stream().filter(g -> g.getType().equals("cardinality")).toList().get(0);
 			
 			int lb = currentGroup.getLower();
 			int ub = currentGroup.getUpper();
 			
 			children = Arrays.asList(currentGroup.getChildren());
-			result = new FMCard(feature.getName(),children,lb,ub);
-			break;*/
-		// DO NOT DELETE
+			result = new FMCard(feature.getName(),children,lb,ub,generator);
+			break;
+			
 		default:
 			throw new  UnsupportedOperationException("FilteredTypes not consistent with typeIndex"); // cannot happen 
 		}
@@ -177,15 +178,15 @@ public abstract class FeatureModel {
 	public abstract Conf sample(); // TODO : Factorizing sub-class source code
 
 	//TODO public enumerate
-	public static List<ConfSet> enumerate(List<FeatureModel> fmList, boolean isOptional) {
+	public static List<ConfSet> enumerate(List<FeatureDiagram> fmList, boolean isOptional) {
 		LinkedList<ConfSet> result = new LinkedList<ConfSet>();
 		
 		if(isOptional) {
-			for(FeatureModel fm : fmList) {
+			for(FeatureDiagram fm : fmList) {
 				result.addLast(fm.enumerate());
 			}
 		}else {
-			for(FeatureModel fm : fmList) {
+			for(FeatureDiagram fm : fmList) {
 				result.addLast(fm.enumerate().union(new ConfSet()));
 			}
 		}

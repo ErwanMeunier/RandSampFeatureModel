@@ -1,6 +1,6 @@
 package randsampFM;
 
-import randsampFM.featureModel.FeatureModel;
+import randsampFM.featureModel.FeatureDiagram;
 import randsampFM.types.Conf;
 import randsampFM.types.ConfSet;
 
@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.io.File;
 //import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -31,6 +32,10 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.time.StopWatch;
+
+import com.fasterxml.jackson.core.exc.StreamWriteException;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 //import java.util.stream.IntStream;
 import java.util.Map;
@@ -95,22 +100,37 @@ public final class Main implements Runnable {
 	public void run() {
 		//System.out.println(path);
 		
-		FeatureModel fm = parseAndConvert(path);
+		FeatureDiagram fm = parseAndConvert(path);
 		
 		if(samplesize > 0) {
 			System.out.println("BENCHMARK MODE");
 			System.out.println("WARNING: others options will be ignored");
 			
-			fm.count();
+			List<Integer> benchResult = benchmark(fm, samplesize);
+			class Data{
+				@SuppressWarnings("unused")
+				public List<Integer> raw = benchResult;
+				//@SuppressWarnings("unused")
+				//public long sampleSize = 100000;
+			}
+				ObjectMapper mapper = new ObjectMapper();
+				
+				try {
+					mapper.writeValue(new File(wd + "/src/test/resources/Benchmarks/bench.json"), new Data());
+				} catch (StreamWriteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (DatabindException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				System.out.println("Output successfully saved");
 			
-			long time = benchTimeSample(samplesize,fm);
-			double avgtime = (double) time/samplesize;
 			
-			System.out.println("Sample size: " + samplesize);
-			System.out.println("Time: " + time);
-			System.out.println("Average time: " + avgtime);
-			
-			System.out.println("Done");			
 		} else {
 			if(counting) {
 				System.out.println("COUNTING");
@@ -153,16 +173,17 @@ public final class Main implements Runnable {
 	    }
 	}
 
-	private FeatureModel uvlModeltoFM(final UVLModel uvlmodel){
+	private FeatureDiagram uvlModeltoFM(final UVLModel uvlmodel){ //TODO : change the name
 		de.neominik.uvl.ast.Feature rootFeature = Arrays.asList(uvlmodel.getRootFeatures()).stream().findFirst().get();
-		return FeatureModel.parseFeatureModel(rootFeature, generator);
+		return FeatureDiagram.parseFeatureDiagram(rootFeature, generator);
 	}
 	
-	private FeatureModel parseAndConvert(final String filename) { // mainly intended to the benchmark
+	private FeatureDiagram parseAndConvert(final String filename) { // mainly intended to the benchmark
 		return uvlModeltoFM(loadModel(filename));
 	}
 	
-	private List<Integer> benchmark(final FeatureModel fm, final long nbOfSamples){
+	@SuppressWarnings("unused")
+	private List<Integer> benchmark(final FeatureDiagram fm, final long nbOfSamples){
 		BigInteger nbConf = fm.count();
 		final long threshold = 100000;
 		final BigInteger bigThreshold = BigInteger.valueOf(threshold);
@@ -180,8 +201,14 @@ public final class Main implements Runnable {
 			
 			ArrayList<Conf> configs = new ArrayList<Conf>(enumerationOfFM.getInnerSet().stream().toList()); // add .sorted() ?
 			
-			Map<Conf, Integer> intToconf = fm.enumerate().getInnerSet().stream().map(x -> new Conf[] {x,x}).collect(Collectors.toMap(e -> e[0], e -> configs.indexOf(e[0])));
 			//associate configs index and conf
+			Map<Conf, Integer> intToconf = 
+					fm.enumerate()
+					.getInnerSet()
+					.stream()
+					.map(x -> new Conf[] {x,x})
+					.collect(Collectors.toMap(e -> e[0], e -> configs.indexOf(e[0])));
+			
 			
 			ArrayList<Integer> rawData = new ArrayList<Integer>(Collections.nCopies(smallNbConf, 0));
 			// ArrayList full of zeros
@@ -198,7 +225,7 @@ public final class Main implements Runnable {
 		return data;
 	}
 	
-	public static long benchTimeSample(long nbSamples, FeatureModel fm) {
+	public static long benchTimeSample(long nbSamples, FeatureDiagram fm) {
 		StopWatch watch = new StopWatch();
 		watch.start();
 		for(long i = 0 ; i < nbSamples; i++) {
@@ -242,3 +269,14 @@ ObjectMapper mapper = new ObjectMapper();
 			}
 			
 			System.out.println("Output successfully saved");*/
+
+/* BENCH TIME
+fm.count();
+long time = benchTimeSample(samplesize,fm);
+double avgtime = (double) time/samplesize;
+
+System.out.println("Sample size: " + samplesize);
+System.out.println("Time: " + time);
+System.out.println("Average time: " + avgtime);
+
+System.out.println("Done");		*/	

@@ -11,13 +11,13 @@ import java.util.Random;
 import randsampFM.types.Conf;
 import randsampFM.types.ConfSet;
 
-public final class FMXor extends FeatureModel{
+public final class FMXor extends FeatureDiagram{
 
-	List<FeatureModel> children;
+	List<FeatureDiagram> children;
 	
 	public FMXor(String label, List<de.neominik.uvl.ast.Feature> rawChildren, final Random generator) {
 		super(label, generator);
-		this.children = rawChildren.stream().map(x -> parseFeatureModel(x,generator)).collect(Collectors.toList());
+		this.children = rawChildren.stream().map(x -> parseFeatureDiagram(x,generator)).collect(Collectors.toList());
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -51,7 +51,7 @@ public final class FMXor extends FeatureModel{
 		return result;
 	}
 	
-	private FeatureModel choose(){
+	private FeatureDiagram choose(){
 		double r = generator.nextDouble();
 		BigDecimal nbConf = new BigDecimal(this.count());
 		
