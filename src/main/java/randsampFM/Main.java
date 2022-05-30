@@ -138,7 +138,7 @@ public final class Main implements Runnable {
 				System.out.println("Done");
 			}
 			
-			if(nbSamples>0) {
+			if(nbSamples>1) {
 				System.out.println("SAMPLING");
 				for(long i=1; i<=nbSamples; i++) {
 					System.out.println("[" + i + "]:" + fm.sample());

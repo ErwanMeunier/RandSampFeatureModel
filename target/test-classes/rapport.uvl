@@ -1,9 +1,9 @@
 namespace Root
 
 features
-	Voiture {abstract, extended__}	
+	Voiture	
 		mandatory
-			Scellerie	
+			Sellerie	
 				alternative
 					Tissu
 					Cuir
@@ -18,3 +18,7 @@ features
 							Allemagne
 							Italie
 			Climatisation
+
+constraints
+	Cuir => GPS
+	Tissu => !Climatisation
