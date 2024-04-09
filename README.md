@@ -3,11 +3,10 @@ RandSampFeatureModel is aimed at returning a sample of configurations following 
 
 Example:
 
-``̀
 
-java -jar randsampfm -e -c -s=100 --path=~/featuremodel.uvl
+``` java -jar randsampfm -e -c -s=100 --path=~/featuremodel.uvl ```
 
-```
+
 enumerates and counts the feasible configurations, whereas -s=100 returns 100 random configurations. 
 
 Credits :
