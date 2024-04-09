@@ -3,7 +3,7 @@ RandSampFeatureModel is aimed at returning a sample of configurations following 
 
 Example:
 
-``̀`
+``̀
 
 java -jar randsampfm -e -c -s=100 --path=~/featuremodel.uvl
 
